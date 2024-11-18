@@ -5,8 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Clean And Clear</title>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
 </head>
 <body>
+<%@ include file="Header.jsp" %>
 
+
+<%@ include file="Footer.jsp" %>
 </body>
 </html>

@@ -4,9 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Clean And Clear | Scheduling</title>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
 </head>
 <body>
+<%@ include file="Header.jsp" %>
+
 
 </body>
 </html>
