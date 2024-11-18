@@ -1,4 +1,4 @@
-package server;
+package Controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,16 +8,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class verifyLogin
+ * Servlet implementation class adminController
  */
-@WebServlet("/verifyLogin")
-public class verifyLogin extends HttpServlet {
+@WebServlet("/adminController")
+public class adminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public verifyLogin() {
+    public adminController() {
         super();
         // TODO Auto-generated constructor stub
     }
