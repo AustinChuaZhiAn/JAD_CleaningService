@@ -1,0 +1,91 @@
+@charset "UTF-8";
+body {
+    margin: 0;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stat-block {
+    text-align: center;
+    flex: 1;
+    margin: 0 20px;
+}
+
+.stat-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.stat-number {
+    font-size: 64px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.service-banner {
+    background-color: #e6ffcc;
+    padding: 40px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+.banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.text-content {
+    flex: 1;
+}
+
+.text-content p {
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+.book-button {
+    display: inline-block;
+    background-color: white;
+    color: black;
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.book-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.icon img {
+    margin-left: 40px;
+    object-fit: contain; /* This ensures the image maintains its aspect ratio */
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+    .banner-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .icon img {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}

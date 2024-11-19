@@ -1,11 +1,4 @@
 @charset "UTF-8";
-/* General Reset */
-body, html, ul, li, h3, p {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-family: Arial, sans-serif;
-}
 
 /* Footer Styling */
 .main-footer {
