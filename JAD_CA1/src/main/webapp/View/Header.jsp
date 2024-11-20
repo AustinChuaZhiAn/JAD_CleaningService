@@ -18,24 +18,11 @@
 			class="nav-button">Your Bookings</a>
 		<%
 		} else {
-		    String currentURL = request.getRequestURL().toString();
-		    if (currentURL.endsWith("Login.jsp")) {
-		    	%>
-				<a
-				href="<%=request.getContextPath()%>/View/Home.jsp"
-				class="nav-button">Home</a>
-				<% 
-		    	
-		    	
-		    	
-		    	
-		    } else {
-		    	%>
-				<a
-				href="<%=request.getContextPath()%>/View/Login.jsp"
-				class="nav-button">Login</a>
-				<% 
-		    }
+		%>
+		<a
+			href="<%=request.getContextPath()%>/View/Login.jsp"
+			class="nav-button">Login</a>
+		<%
 		}
 		%>
 	</nav>
