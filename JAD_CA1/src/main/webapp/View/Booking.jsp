@@ -79,6 +79,9 @@
 			</div>
 		</div>
 		
+	    <label for="specialRequests">Please enter any special requests:</label><br>
+    	<textarea id="specialRequests" name="specialRequests" rows="4" cols="50" placeholder="Type your special requests here..."></textarea><br><br>
+		
 		<input type="submit" value="nextBtn">
 	</form>
 

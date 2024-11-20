@@ -7,7 +7,7 @@
 <title>Clean And Clear | Frequency</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Header.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Footer.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Home.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/FrequencyOption.css">
 </head>
 <body>
 	<%@ include file="Header.jsp"%>
@@ -19,18 +19,6 @@
                 <label class="option-card">
                     <input type="radio" name="frequency" value="weekly" />
                     Weekly
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="frequency" value="biweekly" />
-                    Bi-Weekly
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="frequency" value="monthly" />
-                    Monthly
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="frequency" value="onetime" />
-                    One Time
                 </label>
             </div>
         </div>
