@@ -1,1 +1,45 @@
 @charset "UTF-8";
+
+body {
+	background-color: #f0fff0;
+	font-family: Arial, sans-serif;
+}
+
+.schedule-container {
+	background-color: white;
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.week-dates {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	color: #4CAF50;
+}
+
+.dropdown-container {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+select {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #4CAF50;
+	border-radius: 4px;
+	background-color: #f1f1f1;
+	color: #4CAF50;
+}
+
+.selected-times {
+	background-color: #e6f2e6;
+	padding: 10px;
+	border-radius: 4px;
+	text-align: center;
+}
