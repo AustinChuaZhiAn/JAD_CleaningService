@@ -3,29 +3,14 @@ package Model;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
+import utils.DatabaseConnection; 
 
 public class FrequencyList implements FrequencyCRUD {
-	private Connection getConnection() {
-		try {
-		// Step1: Load JDBC Driver
-		Class.forName("com.mysql.jdbc.Driver");
-		
-		// Step 2: Define Connection URL
-		String connURL ="jdbc:mysql://localhost/jad_db1?user=root&password=mypassword&serverTimezone=UTC";
-		
-		// Step 3: Establish connection to URL
-		return DriverManager.getConnection(connURL);
-		} catch (SQLException e) {
-			System.out.println("Sql Error: " + e);
-		} catch (ClassNotFoundException e) {
-			System.out.println("Class not found: " + e);
-		}
-	}
 
 	@Override
 	public void addFrequency(Frequency frequency) throws SQLException {
 		String sql = "INSERT INTO frequency (frequency_id, frequency) VALUES (?, ?)";
-		try (Connection conn = getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			
 			pstmt.setInt(1, frequency.getFrequencyId());
@@ -44,7 +29,7 @@ public class FrequencyList implements FrequencyCRUD {
 	@Override
 	public Frequency getFrequencyById(int id) throws SQLException {
 		String sql = "SELECT * FROM frequency WHERE frequency_id = ?";
-		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, id);
 
@@ -62,7 +47,7 @@ public class FrequencyList implements FrequencyCRUD {
 		List<Frequency> frequency = new ArrayList<>();
 		String sql = "SELECT * FROM frequency";
 
-		try (Connection conn = getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -77,7 +62,7 @@ public class FrequencyList implements FrequencyCRUD {
 	public void updateFrequency(Frequency frequency) throws SQLException {
 		String sql = "UPDATE frequency SET frequency = ? WHERE frequency_id = ?";
 
-		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, frequency.getFrequencyId());
 			pstmt.setString(2, frequency.getFrequency());
@@ -90,7 +75,7 @@ public class FrequencyList implements FrequencyCRUD {
 	public void deleteFrequency(int id) throws SQLException {
 		String sql = "DELETE FROM frequency WHERE frequency_id = ?";
 
-		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();

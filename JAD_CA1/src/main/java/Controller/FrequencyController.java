@@ -6,6 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import Model.Frequency;
+import Model.FrequencyCRUD;
+import Model.FrequencyList;
 
 /**
  * Servlet implementation class FrequencyController
@@ -13,29 +18,66 @@ import java.io.IOException;
 @WebServlet("/FrequencyController")
 public class FrequencyController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FrequencyController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	private FrequencyCRUD frequencyList;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	public void init() {
+		frequencyList = new FrequencyList();
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public FrequencyController() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String action = request.getParameter("action");
+		try {
+			if (action == null) {
+				listFrequency(request, response);
+			} else {
+				switch (action) {
+				case "new":
+//					showNewForm(request, response);
+					break;
+				case "edit":
+//					showEditForm(request, response);
+					break;
+				case "delete":
+//					deleteCategory(request, response);
+					break;
+				default:
+					listFrequency(request, response);
+				}
+			}
+		} catch (SQLException ex) {
+			throw new ServletException(ex);
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+
+	private void listFrequency(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, ServletException, IOException {
+		List<Frequency> frequency = frequencyList.getAllFrequency();
+		request.setAttribute("frequencyList", frequency);
+		request.getRequestDispatcher("/FrequencyOption.jsp").forward(request, response);
 	}
 
 }
