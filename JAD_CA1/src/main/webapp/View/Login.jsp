@@ -6,7 +6,7 @@
     <title>Clean and Clear - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/Login.css">
-        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Home.css">
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Footer.css">
 </head>
 <body>
     <div class="page-container">
@@ -39,7 +39,7 @@
                 <div class="guest-access">
     <a href="Home.jsp" class="guest-button">
         <i class="fas fa-user-clock"></i>
-        <span>View as Guest</span>
+        <span>View Page</span>
     </a>
 </div>
             </div>
@@ -52,7 +52,7 @@
                         <i class="fas fa-broom logo-icon"></i>
                     </div>
                     <h1>Welcome Back!</h1>
-                    <p>Sign in to access your cleaning service dashboard</p>
+                    <p>Log in to get access to your cleaning service resources.</p>
                 </div>
 
                 <form action="verifyAccount" method="POST" class="login-form">
