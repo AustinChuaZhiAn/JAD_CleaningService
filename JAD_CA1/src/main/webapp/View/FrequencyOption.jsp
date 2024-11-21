@@ -16,7 +16,7 @@
 <body>
 	<%@ include file="Header.jsp"%>
 
-	<form action="Booking.jsp" method="POST">
+	<form action="<%=request.getContextPath()%>/Controller/Booking.java" method="POST">
 		<div class="section">
 			<div class="section-title">Frequency Options</div>
 			<div class="options-container">
@@ -44,27 +44,14 @@
 			<div class="section-title">Cleaning Duration</div>
 			<div class="options-container">
 				<label class="option-card"> <input type="radio"
-					name="duration" value="2hours" /> 2 Hours
+					name="duration" value="2hr" /> 2 Hours
 				</label> <label class="option-card"> <input type="radio"
-					name="duration" value="3hours" /> 3 Hours
+					name="duration" value="3hr" /> 3 Hours
 				</label> <label class="option-card"> <input type="radio"
-					name="duration" value="4hours" /> 4 Hours
+					name="duration" value="4hr" /> 4 Hours
 				</label> <label class="option-card"> <input type="radio"
-					name="duration" value="5hours" /> 5 Hours
+					name="duration" value="5hr" /> 5 Hours
 				</label>
-			</div>
-		</div>
-
-		<div class="section">
-			<div class="section-title">Type of Property</div>
-			<div class="dropdown-container">
-				<select name="propertyType" required>
-					<option value="">Select property type</option>
-					<option value="apartment">Apartment</option>
-					<option value="house">House</option>
-					<option value="condo">Condo</option>
-					<option value="office">Office</option>
-				</select>
 			</div>
 		</div>
 

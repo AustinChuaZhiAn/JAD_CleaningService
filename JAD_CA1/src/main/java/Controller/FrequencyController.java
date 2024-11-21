@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -75,6 +77,10 @@ public class FrequencyController extends HttpServlet {
 
 	private void listFrequency(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
+		String serviceType = request.getParameter("serviceType");
+        HttpSession session = request.getSession();
+        session.setAttribute("selectedServiceType", serviceType);
+        
 		List<Frequency> frequency = frequencyList.getAllFrequency();
 		request.setAttribute("frequencyList", frequency);
 		request.getRequestDispatcher("/FrequencyOption.jsp").forward(request, response);

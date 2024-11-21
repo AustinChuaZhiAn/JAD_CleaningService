@@ -29,11 +29,11 @@
 						environment you’ll love coming back to! 👉 Let us do the dirty
 						work, so you don’t have to!</p>
 					
-					<a href="#" class="book-button">Book Now!</a>
+					<a href="<%=request.getContextPath()%>/Controller/CategoryController.java" class="book-button">Book Now!</a>
 				
 				</div>
         		<div class="icon">
-            		<img src="path/to/your/image.png" alt="Cleaning Icon" width="150" height="150">
+            		<img src="<%=request.getContextPath()%>/img/img_url" alt="Cleaning Icon" width="150" height="150">
         		</div>
 			</div>
 		</div>

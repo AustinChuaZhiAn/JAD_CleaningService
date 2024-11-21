@@ -5,33 +5,29 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
-import java.sql.*;
-import Model.*;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.ArrayList;
+
+import Model.*;
 
 /**
- * Servlet implementation class categoryController
+ * Servlet implementation class ServiceController
  */
-@WebServlet("/CategoryController")
-public class CategoryController extends HttpServlet {
+@WebServlet("/ServiceTypeController")
+public class ServiceTypeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CategoryController() {
+    public ServiceTypeController() {
         super();
         // TODO Auto-generated constructor stub
     }
-    
-    private CategoryCRUD categoryCRUD;
 
-    public void init() {
-    	categoryCRUD = new ServiceCategoryList();
-    }
-    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -48,17 +44,24 @@ public class CategoryController extends HttpServlet {
 		doGet(request, response);
 	}
 	
-    private void listCategories(HttpServletRequest request, HttpServletResponse response)
+    private void serviceTypeList(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
+    	
+        String categoryName = request.getParameter("categoryName");
+    	
+        HttpSession session = request.getSession();
+        session.setAttribute("selectedCategory", categoryName);
+    	
         List<ServiceCategory> categories = categoryCRUD.getAllCategories();
-        List<ServiceCategory> categoryOnlyList = new ArrayList<>();
+        List<ServiceType> serviceTypeList = ;
+        
         for(ServiceCategory category: categories) {
-        	if(category.getServiceType() == 1) {
-        	categoryOnlyList.add(category);
+        	if(category.getCategoryName() == categoryName) {
+        		serviceTypeList.add(category.getServiceType());
         	}
         }
-        request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/ServiceCategories.jsp").forward(request, response);
+        request.setAttribute("serviceTypeList", serviceTypeList);
+        request.getRequestDispatcher("/ServiceType.jsp").forward(request, response);
     }
 
 }
