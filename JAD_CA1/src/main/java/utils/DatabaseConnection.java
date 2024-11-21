@@ -1,27 +1,38 @@
 package utils;
 
-import java.sql.*;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class DatabaseConnection {
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/JAD_Project";
-    private static final String USER = "root";
-    private static final String PASSWORD = "mypassword";
-    private static final String TIMEZONE = "serverTimezone=UTC";
+    private static Properties props = new Properties();
+
     
+    static {
+        try (InputStream input = DatabaseConnection.class.getClassLoader()
+                .getResourceAsStream("database.properties")) {
+            if (input == null) {
+                throw new RuntimeException("Unable to find database.properties");
+            }
+            props.load(input);
+            Class.forName(props.getProperty("db.driver"));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load database properties", e);
+        }
+    }
+    
+    // Private constructor to prevent instantiation
     private DatabaseConnection() {}
     
     public static Connection getConnection() throws SQLException {
-        try {
-            Class.forName(DRIVER);
-            return DriverManager.getConnection(
-                URL + "?user=" + USER + 
-                "&password=" + PASSWORD + 
-                "&" + TIMEZONE
-            );
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("Database driver not found: " + e.getMessage());
-        }
+        return DriverManager.getConnection(
+            props.getProperty("db.url") + 
+            "?user=" + props.getProperty("db.user") + 
+            "&password=" + props.getProperty("db.password") + 
+            "&serverTimezone=" + props.getProperty("db.timezone")
+        );
     }
     
     public static void closeConnection(Connection connection) {

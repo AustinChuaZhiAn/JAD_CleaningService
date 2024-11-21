@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 import Model.*;
 
@@ -19,7 +20,11 @@ import Model.*;
 @WebServlet("/ServiceTypeController")
 public class ServiceTypeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private ServiceTypeRead serviceTypeList;
+
+	public void init() {
+		serviceTypeList = new ServiceTypeList();
+	}
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -53,14 +58,19 @@ public class ServiceTypeController extends HttpServlet {
         session.setAttribute("selectedCategory", categoryName);
     	
         List<ServiceCategory> categories = categoryCRUD.getAllCategories();
-        List<ServiceType> serviceTypeList = ;
+        List<ServiceType> serviceType = serviceTypeList.getAllServiceType();
+        ArrayList<ServiceType>  requiredServiceType = new ArrayList<>();
         
         for(ServiceCategory category: categories) {
         	if(category.getCategoryName() == categoryName) {
-        		serviceTypeList.add(category.getServiceType());
+        		for (ServiceType serviceTypeForPage : serviceType) {
+        			if(serviceTypeForPage.getService_type_id() == category.getServicetype()) {
+        				requiredServiceType.add(serviceTypeForPage);
+        			}
+        		}
         	}
         }
-        request.setAttribute("serviceTypeList", serviceTypeList);
+        request.setAttribute("serviceTypeList", requiredServiceType);
         request.getRequestDispatcher("/ServiceType.jsp").forward(request, response);
     }
 
