@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="Model.*, java.util.List, java.util.ArrayList"%>
+<%@ page import="Model.*, java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,19 +14,19 @@
 
     <%
         // Fetch the categories from the request attribute
-        ArrayList<String> serviceTypeList = (ArrayList<String>) request.getAttribute("serviceTypeList");
+        List<ServiceType> serviceTypeList = (List<ServiceType>) request.getAttribute("serviceTypeList");
     %>
 
     <div class="category-container">
         <% 
             // Check if categories are available
-            if (!serviceTypeList.isEmpty()) {
+            if (serviceTypeList != null && !serviceTypeList.isEmpty()) {
                 // Loop through categories and display each
-                for (String serviceType: serviceTypeList) {
+                for (ServiceType serviceType: serviceTypeList) {
         %>
-            <a href="<%=request.getContextPath()%>/Controller/FrequencyController.java?categoryName=<%= serviceType%>" class="category-card-link">
+            <a href="<%=request.getContextPath()%>/Controller/FrequencyController.java?serviceType=<%= serviceType.getService_type_id() %>" class="category-card-link">
                 <div class="category-card">
-                    <h3 class="category-title"><%=serviceType%></h3>
+                    <h3 class="category-title"><%= serviceType.getService_type() %></h3>
                 </div>
             </a>
         <% 

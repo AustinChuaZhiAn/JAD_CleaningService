@@ -39,6 +39,11 @@ public class ServiceTypeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		try {
+			listServiceType(request, response);
+		} catch(SQLException ex) {
+			throw new ServletException(ex);
+		}
 	}
 
 	/**
@@ -49,7 +54,7 @@ public class ServiceTypeController extends HttpServlet {
 		doGet(request, response);
 	}
 	
-    private void serviceTypeList(HttpServletRequest request, HttpServletResponse response)
+    private void listServiceType(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
     	
         String categoryName = request.getParameter("categoryName");

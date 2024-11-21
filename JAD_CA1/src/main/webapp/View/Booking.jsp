@@ -79,6 +79,45 @@
 			</div>
 		</div>
 		
+		<label for="addressDropdown">Address</label>
+                <div class="dropdown-container">
+                    <select 
+                        id="addressDropdown" 
+                        name="address" 
+                        required
+                    >
+                        <option value="">Select an Address</option>
+                        
+                        <% 
+                        List<Address> addresses = (List<Address>) request.getAttribute("addresses");
+                        if (addresses != null && !addresses.isEmpty()) {
+                            for (Address address : addresses) { 
+                        %>
+                            <option value="<%= address.getId() %>">
+                                <%= address.getStreetAddress() %>, <%= address.getCity() %>, <%= address.getState() %> <%= address.getZipCode() %>
+                            </option>
+                        <% 
+                            } 
+                        } else {
+                        %>
+                            <option value="" disabled>No addresses available</option>
+                        <% } %>
+                    </select>
+                    
+                    <a href="profile.jsp" class="add-address-btn" title="Add New Address">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+                
+                <% 
+                if (addresses == null || addresses.isEmpty()) { 
+                %>
+                    <div class="no-address-message">
+                        You do not have an address. Please add an address.
+                    </div>
+                <% } %>
+            </div>
+		
 	    <label for="specialRequests">Please enter any special requests:</label><br>
     	<textarea id="specialRequests" name="specialRequests" rows="4" cols="50" placeholder="Type your special requests here..."></textarea><br><br>
 		
@@ -86,53 +125,67 @@
 	</form>
 
 	<script>
-        function updateSelectedTimes(selectElement, dayIndex) {
-            const selectedTime = selectElement.value;
-            const timesOutput = document.getElementById('timesOutput');
-            
-            // Create or update the hidden input for this day
-            let hiddenInput = document.getElementById('hiddenTime' + dayIndex);
-            if (!hiddenInput) {
-                hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.id = 'hiddenTime' + dayIndex;
-                hiddenInput.name = 'selectedTime' + dayIndex;
-                document.getElementById('cleaningScheduleForm').appendChild(hiddenInput);
-            }
-            
-            // Convert 24-hour to 12-hour format
-            const formatTime = (time) => {
-                const [hour, minute] = time.split(':');
-                const hourNum = parseInt(hour);
-                const ampm = hourNum >= 12 ? 'PM' : 'AM';
-                const formattedHour = hourNum % 12 || 12;
-                return `${formattedHour}:00 ${ampm}`;
-            };
+	function updateSelectedTimes(selectElement, dayIndex) {
+	    const selectedTime = selectElement.value;
+	    const timesOutput = document.getElementById('timesOutput');
+	    
+	    // Disable the selected time in all other dropdowns
+	    const allSelects = document.querySelectorAll('select[name^="time"]');
+	    allSelects.forEach((select, index) => {
+	        if (index !== dayIndex) {
+	            // Remove previously disabled options
+	            Array.from(select.options).forEach(option => {
+	                if (option.disabled && option.value !== '') {
+	                    option.disabled = false;
+	                }
+	                
+	                // Disable the selected time in other dropdowns
+	                if (option.value === selectedTime) {
+	                    option.disabled = true;
+	                }
+	            });
+	        }
+	    });
+	    
+	    // Rest of the existing function remains the same...
+	    let hiddenInput = document.getElementById('hiddenTime' + dayIndex);
+	    if (!hiddenInput) {
+	        hiddenInput = document.createElement('input');
+	        hiddenInput.type = 'hidden';
+	        hiddenInput.id = 'hiddenTime' + dayIndex;
+	        hiddenInput.name = 'selectedTime' + dayIndex;
+	        document.getElementById('cleaningScheduleForm').appendChild(hiddenInput);
+	    }
+	    
+	    const formatTime = (time) => {
+	        const [hour, minute] = time.split(':');
+	        const hourNum = parseInt(hour);
+	        const ampm = hourNum >= 12 ? 'PM' : 'AM';
+	        const formattedHour = hourNum % 12 || 12;
+	        return `${formattedHour}:00 ${ampm}`;
+	    };
 
-            // Update display
-            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            if (selectedTime) {
-                const displayText = `${dayNames[dayIndex]}: ${formatTime(selectedTime)}`;
-                hiddenInput.value = selectedTime;
-                
-                // Check if this day already has an entry
-                let existingEntry = document.querySelector(`#timesOutput div[data-day="${dayIndex}"]`);
-                if (existingEntry) {
-                    existingEntry.textContent = displayText;
-                } else {
-                    const newEntry = document.createElement('div');
-                    newEntry.textContent = displayText;
-                    newEntry.setAttribute('data-day', dayIndex);
-                    timesOutput.appendChild(newEntry);
-                }
-            } else {
-                // Remove entry if time is unselected
-                const existingEntry = document.querySelector(`#timesOutput div[data-day="${dayIndex}"]`);
-                if (existingEntry) {
-                    existingEntry.remove();
-                }
-            }
-        }
+	    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	    if (selectedTime) {
+	        const displayText = `${dayNames[dayIndex]}: ${formatTime(selectedTime)}`;
+	        hiddenInput.value = selectedTime;
+	        
+	        let existingEntry = document.querySelector(`#timesOutput div[data-day="${dayIndex}"]`);
+	        if (existingEntry) {
+	            existingEntry.textContent = displayText;
+	        } else {
+	            const newEntry = document.createElement('div');
+	            newEntry.textContent = displayText;
+	            newEntry.setAttribute('data-day', dayIndex);
+	            timesOutput.appendChild(newEntry);
+	        }
+	    } else {
+	        const existingEntry = document.querySelector(`#timesOutput div[data-day="${dayIndex}"]`);
+	        if (existingEntry) {
+	            existingEntry.remove();
+	        }
+	    }
+	}
     </script>
 </body>
 </html>

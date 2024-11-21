@@ -16,7 +16,7 @@
 <body>
 	<%@ include file="Header.jsp"%>
 
-	<form action="<%=request.getContextPath()%>/Controller/Booking.java" method="POST">
+	<form action="<%=request.getContextPath()%>/Controller/BookingController.java">
 		<div class="section">
 			<div class="section-title">Frequency Options</div>
 			<div class="options-container">
@@ -39,20 +39,8 @@
 				%>
 			</div>
 		</div>
-
-		<div class="section">
-			<div class="section-title">Cleaning Duration</div>
-			<div class="options-container">
-				<label class="option-card"> <input type="radio"
-					name="duration" value="2hr" /> 2 Hours
-				</label> <label class="option-card"> <input type="radio"
-					name="duration" value="3hr" /> 3 Hours
-				</label> <label class="option-card"> <input type="radio"
-					name="duration" value="4hr" /> 4 Hours
-				</label> <label class="option-card"> <input type="radio"
-					name="duration" value="5hr" /> 5 Hours
-				</label>
-			</div>
+		<div>
+			<h3>Do take note that our cleaning duration spans from 2 to 4 hours</h3>
 		</div>
 
 		<button type="submit" class="next-button">Next</button>

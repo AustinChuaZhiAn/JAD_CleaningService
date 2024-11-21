@@ -41,25 +41,8 @@ public class FrequencyController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String action = request.getParameter("action");
 		try {
-			if (action == null) {
-				listFrequency(request, response);
-			} else {
-				switch (action) {
-				case "new":
-//					showNewForm(request, response);
-					break;
-				case "edit":
-//					showEditForm(request, response);
-					break;
-				case "delete":
-//					deleteCategory(request, response);
-					break;
-				default:
-					listFrequency(request, response);
-				}
-			}
+			listFrequency(request, response);
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
 		}
@@ -78,9 +61,9 @@ public class FrequencyController extends HttpServlet {
 	private void listFrequency(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
 		String serviceType = request.getParameter("serviceType");
-        HttpSession session = request.getSession();
-        session.setAttribute("selectedServiceType", serviceType);
-        
+		HttpSession session = request.getSession();
+		session.setAttribute("selectedServiceType", serviceType);
+
 		List<Frequency> frequency = frequencyList.getAllFrequency();
 		request.setAttribute("frequencyList", frequency);
 		request.getRequestDispatcher("/FrequencyOption.jsp").forward(request, response);

@@ -43,3 +43,83 @@ select {
 	border-radius: 4px;
 	text-align: center;
 }
+
+.form-container {
+	background-color: white;
+	width: 100%;
+	max-width: 400px;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+	margin-bottom: 15px;
+	position: relative;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+	color: #333;
+	font-weight: bold;
+}
+
+.dropdown-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+select {
+	flex-grow: 1;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-color: white;
+}
+
+.add-address-btn {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.add-address-btn:hover {
+	background-color: #0056b3;
+}
+
+.no-address-message {
+	color: #666;
+	text-align: center;
+	padding: 10px;
+	background-color: #f9f9f9;
+	border-radius: 20px;
+}
+
+.submit-btn {
+	width: 100%;
+	padding: 10px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-top: 15px;
+}
+
+.submit-btn:hover {
+	background-color: #0056b3;
+}
