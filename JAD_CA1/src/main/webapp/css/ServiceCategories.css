@@ -2,4 +2,53 @@
 
 body {
     margin: 0;
+    color: #e6ffcc;
+}
+
+/* Center the category container */
+.category-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px auto;
+    max-width: 1200px; /* Limits the container width */
+    padding: 0 15px; /* Adds horizontal padding */
+}
+
+/* Flexbox row layout for cards */
+.row {
+    display: flex;
+    flex-wrap: wrap; /* Ensures cards wrap to the next row */
+    gap: 15px; /* Adds spacing between cards */
+    justify-content: space-evenly; /* Aligns cards evenly */
+}
+
+/* Each card takes 3 columns in a 12-column grid */
+.col-3 {
+    flex: 0 0 25%; /* 3 columns = 25% width */
+    max-width: 25%;
+    box-sizing: border-box; /* Includes padding/border in width calculation */
+    padding: 10px; /* Adds spacing inside the column */
+}
+
+/* Styling the card */
+.category-card {
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; /* Indicates the card is clickable */
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Link styling */
+.category-card-link {
+    text-decoration: none;
+    color: inherit;
 }

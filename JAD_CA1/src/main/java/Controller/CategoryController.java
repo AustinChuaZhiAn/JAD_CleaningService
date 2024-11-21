@@ -6,22 +6,32 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.*;
+import Model.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Servlet implementation class bookingController
+ * Servlet implementation class categoryController
  */
-@WebServlet("/bookingController")
-public class bookingController extends HttpServlet {
+@WebServlet("/CategoryController")
+public class CategoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public bookingController() {
+    public CategoryController() {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    private CategoryCRUD categoryCRUD;
 
+    public void init() {
+    	categoryCRUD = new ServiceCategoryList();
+    }
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -37,5 +47,18 @@ public class bookingController extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+    private void listCategories(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, ServletException, IOException {
+        List<ServiceCategory> categories = categoryCRUD.getAllCategories();
+        List<ServiceCategory> categoryOnlyList = new ArrayList<>();
+        for(ServiceCategory category: categories) {
+        	if(category.getServiceType() == 1) {
+        	categoryOnlyList.add(category);
+        	}
+        }
+        request.setAttribute("categories", categories);
+        request.getRequestDispatcher("/ServiceCategories.jsp").forward(request, response);
+    }
 
 }
