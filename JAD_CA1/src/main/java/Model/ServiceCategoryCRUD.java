@@ -23,5 +23,5 @@ public interface ServiceCategoryCRUD {
     
     // Optional: Combined operations that might be useful
 //    List<ServiceCategoryDTO> getServicesWithCategories() throws SQLException;
-	
+    int getServiceIdByDetails(int category_id, int service_type_id, int frequency_id) throws SQLException;
 }
