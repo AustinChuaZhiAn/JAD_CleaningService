@@ -5,7 +5,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Clean and Clear - Register</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   <link rel="stylesheet" href="<%=request.getContextPath()%>/css/Login.css">
+   <link rel="stylesheet" href="<%=request.getContextPath()%>/css/LoginRegister.css">
    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Footer.css">
 </head>
 <body>
