@@ -9,6 +9,13 @@
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Footer.css">
 </head>
 <body>
+<%
+    if (session.getAttribute("username") != null) {
+        session.invalidate();
+        response.sendRedirect(request.getContextPath() + "/View/Login.jsp");
+        return;
+    }
+%>
     <div class="page-container">
         <section class="left-section">
             <div class="company-info">
@@ -37,7 +44,7 @@
                     </div>
                 </div>
                 <div class="guest-access">
-    <a href="Home.jsp" class="guest-button">
+    <a href="${pageContext.request.contextPath}/View/Home.jsp" class="guest-button">
         <i class="fas fa-user-clock"></i>
         <span>View Page</span>
     </a>
@@ -55,15 +62,25 @@
                     <p>Log in to get access to your cleaning service resources.</p>
                 </div>
 
-                <form action="verifyAccount" method="POST" class="login-form">
-                    <div class="input-group">
-                        <label for="email">Email Address</label>
-                        <div class="input-with-icon">
-                            <input type="email" id="email" name="email" required placeholder="Enter your email">
-                            <i class="fas fa-envelope input-icon"></i>
-                        </div>
-                    </div>
+<form action="${pageContext.request.contextPath}/userController" method="POST" class="login-form">
+    <input type="hidden" name="action" value="verify">
+    
+<% if (session.getAttribute("error") != null) { %>
+    <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <%= session.getAttribute("error") %>
+    </div>
+    <% session.removeAttribute("error"); %>
+    
+<% } %>
 
+    <div class="input-group">
+        <label for="username">Username</label>
+        <div class="input-with-icon">
+            <input type="text" id="username" name="username" required placeholder="Enter your username">
+            <i class="fas fa-user input-icon"></i>  
+        </div>
+    </div>
                     <div class="input-group">
                         <label for="password">Password</label>
                         <div class="input-with-icon">
@@ -72,14 +89,6 @@
                         </div>
                     </div>
 
-                    <div class="remember-forgot">
-                        <label class="remember-me">
-                            <input type="checkbox" name="remember">
-                            <span class="checkmark"></span>
-                            Remember me
-                        </label>
-                        <a href="#" class="forgot-link">Forgot password?</a>
-                    </div>
 
                     <button type="submit" class="login-button">
                         <span>Sign In</span>
@@ -102,7 +111,7 @@
                     </div>
 
                     <div class="login-footer">
-                        <p>Don't have an account? <a href="#">Sign up</a></p>
+                        <p>Don't have an account? <a href="${pageContext.request.contextPath}/View/Register.jsp">Sign up</a></p>
                     </div>
                 </form>
             </div>

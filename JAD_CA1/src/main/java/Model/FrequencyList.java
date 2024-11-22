@@ -5,27 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import utils.DatabaseConnection; 
 
-public class FrequencyList implements FrequencyCRUD {
-
-	@Override
-	public void addFrequency(Frequency frequency) throws SQLException {
-		String sql = "INSERT INTO frequency (frequency_id, frequency) VALUES (?, ?)";
-		try (Connection conn = DatabaseConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			
-			pstmt.setInt(1, frequency.getFrequencyId());
-			pstmt.setString(2, frequency.getFrequency());
-
-			pstmt.executeUpdate();
-
-			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					frequency.setFrequencyId(generatedKeys.getInt(1));
-				}
-			}
-		}
-	}
-
+public class FrequencyList implements FrequencyRead {
 	@Override
 	public Frequency getFrequencyById(int id) throws SQLException {
 		String sql = "SELECT * FROM frequency WHERE frequency_id = ?";
@@ -56,29 +36,5 @@ public class FrequencyList implements FrequencyCRUD {
 			}
 		}
 		return frequency;
-	}
-
-	@Override
-	public void updateFrequency(Frequency frequency) throws SQLException {
-		String sql = "UPDATE frequency SET frequency = ? WHERE frequency_id = ?";
-
-		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-			pstmt.setInt(1, frequency.getFrequencyId());
-			pstmt.setString(2, frequency.getFrequency());
-
-			pstmt.executeUpdate();
-		}
-	}
-
-	@Override
-	public void deleteFrequency(int id) throws SQLException {
-		String sql = "DELETE FROM frequency WHERE frequency_id = ?";
-
-		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-			pstmt.setInt(1, id);
-			pstmt.executeUpdate();
-		}
 	}
 }

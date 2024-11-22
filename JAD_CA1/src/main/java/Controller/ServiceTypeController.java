@@ -58,15 +58,17 @@ public class ServiceTypeController extends HttpServlet {
             throws SQLException, ServletException, IOException {
     	
         String categoryName = request.getParameter("categoryName");
+        String category_idStr = request.getParameter("category_id");
+        int category_id = Integer.parseInt(category_idStr);
     	
         HttpSession session = request.getSession();
-        session.setAttribute("selectedCategory", categoryName);
+        session.setAttribute("category_id", category_id);
     	
-        List<ServiceCategory> categories = categoryCRUD.getAllCategories();
+        List<Service> categories = categoryCRUD.getAllCategories();
         List<ServiceType> serviceType = serviceTypeList.getAllServiceType();
         ArrayList<ServiceType>  requiredServiceType = new ArrayList<>();
         
-        for(ServiceCategory category: categories) {
+        for(Service category: categories) {
         	if(category.getCategoryName() == categoryName) {
         		for (ServiceType serviceTypeForPage : serviceType) {
         			if(serviceTypeForPage.getService_type_id() == category.getServicetype()) {
@@ -76,7 +78,7 @@ public class ServiceTypeController extends HttpServlet {
         	}
         }
         request.setAttribute("serviceTypeList", requiredServiceType);
-        request.getRequestDispatcher("/ServiceType.jsp").forward(request, response);
+        request.getRequestDispatcher(request.getContextPath() + "/ServiceType.jsp").forward(request, response);
     }
 
 }

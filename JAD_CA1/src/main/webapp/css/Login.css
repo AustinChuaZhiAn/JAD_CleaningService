@@ -193,19 +193,33 @@ body {
     color: var(--primary-color);
 }
 
-/* Remember Me & Forgot Password */
-.remember-forgot {
+
+
+.error-message {
+    background-color: #ffe3e3;
+    color: #dc3545;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    font-size: 14px;
+    border: 1px solid #ffc1c1;
 }
 
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
+.error-message i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.error-message {
+    animation: shake 0.8s ease-in-out;
 }
 
 .remember-me input[type="checkbox"] {

@@ -26,10 +26,10 @@ public class CategoryController extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    private CategoryCRUD categoryCRUD;
+    private ServiceCRUD categoryCRUD;
 
     public void init() {
-    	categoryCRUD = new ServiceCategoryList();
+    	categoryCRUD = new ServiceList();
     }
     
 	/**
@@ -50,15 +50,15 @@ public class CategoryController extends HttpServlet {
 	
     private void listCategories(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
-        List<ServiceCategory> categories = categoryCRUD.getAllCategories();
-        List<ServiceCategory> categoryOnlyList = new ArrayList<>();
-        for(ServiceCategory category: categories) {
+        List<Service> categories = categoryCRUD.getAllServices();
+        List<Service> categoryOnlyList = new ArrayList<>();
+        for(Service category: categories) {
         	if(category.getServiceType() == 1) {
         	categoryOnlyList.add(category);
         	}
         }
         request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/ServiceCategories.jsp").forward(request, response);
+        request.getRequestDispatcher(request.getContextPath() + "/ServiceCategories.jsp").forward(request, response);
     }
 
 }

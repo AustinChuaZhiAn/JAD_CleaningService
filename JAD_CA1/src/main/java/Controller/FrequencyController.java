@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import Model.Frequency;
-import Model.FrequencyCRUD;
+import Model.FrequencyRead;
 import Model.FrequencyList;
 
 /**
@@ -20,7 +20,7 @@ import Model.FrequencyList;
 @WebServlet("/FrequencyController")
 public class FrequencyController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private FrequencyCRUD frequencyList;
+	private FrequencyRead frequencyList;
 
 	public void init() {
 		frequencyList = new FrequencyList();
@@ -41,6 +41,7 @@ public class FrequencyController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 		try {
 			listFrequency(request, response);
 		} catch (SQLException ex) {
@@ -60,13 +61,14 @@ public class FrequencyController extends HttpServlet {
 
 	private void listFrequency(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
-		String serviceType = request.getParameter("serviceType");
+		String service_type_idStr = request.getParameter("serviceType");
+		int service_type_id = Integer.parseInt(service_type_idStr);
 		HttpSession session = request.getSession();
-		session.setAttribute("selectedServiceType", serviceType);
+		session.setAttribute("service_type_id", service_type_id);
 
 		List<Frequency> frequency = frequencyList.getAllFrequency();
 		request.setAttribute("frequencyList", frequency);
-		request.getRequestDispatcher("/FrequencyOption.jsp").forward(request, response);
+		request.getRequestDispatcher(request.getContextPath() + "/FrequencyOption.jsp").forward(request, response);
 	}
 
 }

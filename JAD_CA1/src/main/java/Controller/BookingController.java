@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import Model.*;
@@ -21,23 +23,30 @@ public class BookingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private AddressCRUD addressList;
 	private BookingCRUD bookingList;
+	private CleanerRead cleanerList;
+	private ServiceCRUD serviceList;
+
 	public void init() {
 		addressList = new AddressList();
 		bookingList = new BookingList();
+		cleanerList = new CleanerList();
+		serviceList = new ServiceList();
 	}
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public BookingController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public BookingController() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		try {
@@ -48,22 +57,67 @@ public class BookingController extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		try {
+			postAddBooking(request, response);
+		} catch (SQLException ex) {
+			throw new ServletException(ex);
+		}
 	}
-	
+
+	private void postAddBooking(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, ServletException, IOException {
+
+		HttpSession session = request.getSession();
+		int user_id = (int) session.getAttribute("user_id");
+
+		String cleaner_idStr = request.getParameter("cleaner");
+		String address_idStr = request.getParameter("address");
+
+		String selectedDateTime = request.getParameter("selectedDateTime");
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm");
+
+		LocalDateTime dateTime = LocalDateTime.parse(selectedDateTime, formatter);
+
+		LocalDate date = dateTime.toLocalDate(); // Extracts only the date for date column
+		LocalTime time = dateTime.toLocalTime(); // Extracts only the time for time column
+		
+		String special_request = request.getParameter("specialRequests");
+
+		int cleaner_id = Integer.parseInt(cleaner_idStr);
+		int address_id = Integer.parseInt(address_idStr);
+		int category_id = (int) session.getAttribute("category_id");
+		int service_type_id = (int) session.getAttribute("service_type_id");
+		int frequency_id = (int) session.getAttribute("frequency_id");
+
+		int service_id = serviceList.getServiceIdByDetails(category_id, service_type_id, frequency_id);
+		
+		int booking_id = bookingList.addBooking(user_id, address_id, time, date, cleaner_id, service_id, special_request);
+		
+		session.invalidate();
+		session.setAttribute("booking_id", booking_id);
+		response.sendRedirect(request.getContextPath() + "/receipt.jsp"); // ADD YOUR PAGE URL HERE
+	}
+
 	private void listBooking(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
-		String selectedFrequency = request.getParameter("frequency");
-        HttpSession session = request.getSession();
-        session.setAttribute("selectedFrequency", selectedFrequency);
-        
-		List<Address> address = addressList.getAllAddress();
-		request.setAttribute("addressList", address);
-		request.getRequestDispatcher("/Booking.jsp").forward(request, response);
+		String frequency_idStr = request.getParameter("frequency");
+		int frequency_id = Integer.parseInt(frequency_idStr);
+		HttpSession session = request.getSession();
+		int user_id = (int) session.getAttribute("user_id");
+		session.setAttribute("frequency_id", frequency_id);
+
+		List<Address> listAddress = addressList.getAddressesByUserId(user_id);
+		List<Cleaner> listCleaner = cleanerList.getAllCleaner();
+		request.setAttribute("cleanerList", listCleaner);
+		request.setAttribute("addressList", listAddress);
+		request.getRequestDispatcher(request.getContextPath() + "/Booking.jsp").forward(request, response);
 	}
 
 }

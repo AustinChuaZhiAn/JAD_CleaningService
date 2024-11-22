@@ -9,12 +9,11 @@ public interface UserAccountCRUD {
 	UserAccount verifyUser(String username,String password) throws SQLException;
 	
 	//CRUD fOr user
-    boolean createUser(UserAccount user) throws SQLException;
-    UserAccount getUserAccount(String username, String password) throws SQLException;
+    boolean createUser(UserAccount user, UserDetails userDetails) throws SQLException;
     List<UserAccount> getAllUser() throws SQLException;
 	boolean updateUser(UserAccount user)throws SQLException;
-	boolean updateUser(int id)throws SQLException;
-	
-	
-	UserAccount findByUsername(String username) throws SQLException;
+	boolean deleteUser(int id)throws SQLException;
+	UserAccount getUserByUsername(String username) throws SQLException;
+	UserDetails getUserDetailsByEmail(String email) throws SQLException;
+	UserDetails getUserDetailsByPhone(String phone) throws SQLException;
 }

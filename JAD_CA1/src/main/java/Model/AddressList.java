@@ -12,40 +12,75 @@ import utils.DatabaseConnection;
 
 public class AddressList implements AddressCRUD {
 	@Override
-	public void addAddress(Address address) throws SQLException {
-		String sql = "INSERT INTO frequency (frequency_id, frequency) VALUES (?, ?)";
-		try (Connection conn = DatabaseConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			
-			pstmt.setInt(1, address.getAddress());
-			pstmt.setInt(2, address.getUser_details());
+	public int addAddress(int user_details_id, int postal_code, String block_number, String street_name
+			, String unit_number, String building_name, int address_type_id) throws SQLException {
+	    String sql = """
+	        INSERT INTO address 
+	        (user_details, postal_code, block_number, street_name, unit_number, building_name, address_type_id) 
+	        VALUES (?, ?, ?, ?, ?, ?, ?)
+	    """;
+	    
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	        
+	        // Set the parameters based on the Address object
+	        pstmt.setInt(1, user_details_id);
+	        pstmt.setInt(2, postal_code);
+	        pstmt.setString(3, block_number);
+	        pstmt.setString(4, street_name);
+	        pstmt.setString(5, unit_number);
+	        pstmt.setString(6, building_name);
+	        pstmt.setInt(7, address_type_id);
 
-			pstmt.executeUpdate();
+	        // Execute the update
+	        pstmt.executeUpdate();
 
-			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					address.setAddress(generatedKeys.getInt(1));
-				}
-			}
-		}
+	        try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                return generatedKeys.getInt(1);
+	            }
+	        }
+	    }
+	    return -1;
 	}
 
+
 	@Override
-	public Address getAddressById(int id) throws SQLException {
-		String sql = "SELECT * FROM address WHERE address = ?";
-		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	public List<Address> getAddressesByUserId(int userId) throws SQLException {
+	    String sql = """
+	        SELECT a.address, a.user_details, a.postal_code, a.block_number, a.street_name, 
+	               a.unit_number, a.building_name, a.address_type_id
+	        FROM address a
+	        JOIN user_details ud ON a.user_details = ud.id
+	        JOIN user u ON ud.user_id = u.id
+	        WHERE u.id = ?;
+	    """;
 
-			pstmt.setInt(1, id);
+	    List<Address> addresses = new ArrayList<>();
 
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					return new Address(rs.getInt("address"), rs.getInt("user_details")
-							, rs.getInt("postal_code"), rs.getString("block_number"), rs.getString("street_name")
-							, rs.getString("unit_number"), rs.getString("building_name"), rs.getInt("address_type_id"));
-				}
-			}
-		}
-		return null;
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	        pstmt.setInt(1, userId);
+
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                Address address = new Address(
+	                    rs.getInt("address"),
+	                    rs.getInt("user_details"),
+	                    rs.getInt("postal_code"),
+	                    rs.getString("block_number"),
+	                    rs.getString("street_name"),
+	                    rs.getString("unit_number"),
+	                    rs.getString("building_name"),
+	                    rs.getInt("address_type_id")
+	                );
+	                addresses.add(address);
+	            }
+	        }
+	    }
+
+	    return addresses;
 	}
 
 	@Override
@@ -68,7 +103,11 @@ public class AddressList implements AddressCRUD {
 
 	@Override
 	public void updateAddress(Address address) throws SQLException {
-		String sql = "UPDATE Address SET user_details = ?, postal_code = ?, block_number = ?, street_name = ?, unit_number = ?, building_name = ?, address_type_id = ? WHERE address = ?;";
+		String sql = """
+				UPDATE Address SET user_details = ?, postal_code = ?, block_number = ?,
+					street_name = ?, unit_number = ?, building_name = ?, address_type_id = ?
+				WHERE address = ?;
+				""" ;
 
 		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
