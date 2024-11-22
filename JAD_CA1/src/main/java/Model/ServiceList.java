@@ -27,8 +27,7 @@ public class ServiceList implements ServiceCRUD {
 			while (rs.next()) {
 				services.add(new Service(rs.getInt("service_id")
 						, rs.getInt("category_id"), rs.getString("category_name")
-						, rs.getInt("img_id"), rs.getInt("service_type_id")
-						, rs.getInt("frequency_id"), rs.getDouble("price")));
+						, rs.getInt("service_type_id") , rs.getInt("frequency_id"), rs.getDouble("price")));
 			}
 		}
 		return services;
