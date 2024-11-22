@@ -8,6 +8,7 @@ import java.util.Properties;
 
 public class DatabaseConnection {
     private static Properties props = new Properties();
+
     
     static {
         try (InputStream input = DatabaseConnection.class.getClassLoader()

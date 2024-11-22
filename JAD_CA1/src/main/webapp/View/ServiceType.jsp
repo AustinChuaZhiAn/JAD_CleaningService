@@ -13,21 +13,20 @@
     <%@ include file="Header.jsp" %>
 
     <%
-    // Fetch the categories from the request attribute
-            List<Service> categories = (List<Service>) request.getAttribute("categories");
+        // Fetch the categories from the request attribute
+        List<ServiceType> serviceTypeList = (List<ServiceType>) request.getAttribute("serviceTypeList");
     %>
 
     <div class="category-container">
-        <%
-        // Check if categories are available
-                    if (categories != null && !categories.isEmpty()) {
-                        // Loop through categories and display each
-                        for (Service category : categories) {
+        <% 
+            // Check if categories are available
+            if (serviceTypeList != null && !serviceTypeList.isEmpty()) {
+                // Loop through categories and display each
+                for (ServiceType serviceType: serviceTypeList) {
         %>
-            <a href="<%=request.getContextPath()%>/Controller/ServiceTypeController.java?categoryName=<%= category.getCategoryName()%>&category_id=<%= category.getCategoryId() %>" class="category-card-link">
+            <a href="<%=request.getContextPath()%>/Controller/FrequencyController.java?serviceType=<%= serviceType.getService_type_id() %>" class="category-card-link">
                 <div class="category-card">
-                    <h3 class="category-title"><%= category.getCategoryName() %></h3>
-                    <p class="category-description"><%= category.getDescription() %></p>
+                    <h3 class="category-title"><%= serviceType.getService_type() %></h3>
                 </div>
             </a>
         <% 

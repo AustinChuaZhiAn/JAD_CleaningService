@@ -41,11 +41,11 @@ public class userController extends HttpServlet {
 //                        break;
 //                        
 //                    default:
-//                        response.sendRedirect("error.jsp");
+//                        response.sendRedirect(request.getContextPath() + "error.jsp");
 //                        break;
 //                }
 //            } else {
-//                response.sendRedirect("error.jsp");
+//                response.sendRedirect(request.getContextPath() + "error.jsp");
 //            }
 //        } catch (SQLException e) {
 //		throw new ServletException(ex);
@@ -73,11 +73,11 @@ public class userController extends HttpServlet {
 //                        break;
                         
                     default:
-                        response.sendRedirect("error.jsp");
+                        response.sendRedirect(request.getContextPath() + "error.jsp");
                         break;
                 }
             } else {
-                response.sendRedirect("Home.jsp");
+                response.sendRedirect(request.getContextPath() + "Home.jsp");
             }
         } catch (SQLException ex) {
 			throw new ServletException(ex);
@@ -101,18 +101,18 @@ public class userController extends HttpServlet {
             
             switch (user.getRole_id()) {
                 case 1: //Admin Login
-                    response.sendRedirect("View/AdminPage.jsp");
+                    response.sendRedirect(request.getContextPath() + "View/AdminPage.jsp");
                     break;
                 case 2: //Member Login
-                    response.sendRedirect("View/Home.jsp");
+                    response.sendRedirect(request.getContextPath() + "View/Home.jsp");
                     break;
                 default:
-                    response.sendRedirect("View/Home.jsp");
+                    response.sendRedirect(request.getContextPath() + "View/Home.jsp");
             }
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Invalid username or password");  
-            response.sendRedirect("View/Login.jsp"); 
+            response.sendRedirect(request.getContextPath() + "View/Login.jsp"); 
         }
     }
     
@@ -134,13 +134,13 @@ public class userController extends HttpServlet {
             if (!phoneNumber.matches("\\d+")) {
                 HttpSession session = request.getSession();
                 session.setAttribute("error", "Phone number must contain only numbers");
-                response.sendRedirect("View/Register.jsp");
+                response.sendRedirect(request.getContextPath() + "View/Register.jsp");
                 return;
             }
             if (userDAO.getUserDetailsByPhone(phoneNumber) != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("error", "Phone number already registered");
-                response.sendRedirect("View/Register.jsp");
+                response.sendRedirect(request.getContextPath() + "View/Register.jsp");
                 return;
             }
             
@@ -151,7 +151,7 @@ public class userController extends HttpServlet {
         if (userDAO.getUserByUsername(newUser.getUsername()) != null) {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Username already exists");
-            response.sendRedirect("View/Register.jsp");
+            response.sendRedirect(request.getContextPath() + "View/Register.jsp");
             return;
         }
 
@@ -159,7 +159,7 @@ public class userController extends HttpServlet {
         if (userDAO.getUserDetailsByEmail(userDetails.getEmail()) != null) {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Email already registered");
-            response.sendRedirect("View/Register.jsp");
+            response.sendRedirect(request.getContextPath() + "View/Register.jsp");
             return;
         }
 
@@ -172,15 +172,15 @@ public class userController extends HttpServlet {
             
             switch (user.getRole_id()) {
                 case 1: //Admin Login
-                    response.sendRedirect("View/AdminPage.jsp");
+                    response.sendRedirect(request.getContextPath() + "View/AdminPage.jsp");
                     break;
                 default: //Member Login
-                    response.sendRedirect("View/Home.jsp");
+                    response.sendRedirect(request.getContextPath() + "View/Home.jsp");
             }
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Registration failed");
-            response.sendRedirect("View/Register.jsp");
+            response.sendRedirect(request.getContextPath() + "View/Register.jsp");
         }
     }
     
@@ -194,7 +194,7 @@ public class userController extends HttpServlet {
 //        user.setRole_id(Integer.parseInt(request.getParameter("role_id")));
 //        
 //        if (userDAO.updateUser(user)) {
-//            response.sendRedirect("profile.jsp?updated=true");
+//            response.sendRedirect(request.getContextPath() + "profile.jsp?updated=true");
 //        } else {
 //            request.setAttribute("error", "Update failed");
 //            request.getRequestDispatcher("profile.jsp").forward(request, response);
