@@ -6,59 +6,47 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.*;
-import Model.*;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.ArrayList;
 
-/**
- * Servlet implementation class categoryController
- */
+import Model.Category;
+import Model.CategoryDAO;
+import Model.CategoryDAOImpl;
+
 @WebServlet("/CategoryController")
 public class CategoryController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CategoryController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-    private ServiceCRUD categoryCRUD;
+    private CategoryDAO categoryDAO;
 
     public void init() {
-    	categoryCRUD = new ServiceList();
+        categoryDAO = new CategoryDAOImpl();
     }
-    
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-	
-    private void listCategories(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, ServletException, IOException {
-        List<Service> categories = categoryCRUD.getAllServices();
-        List<Service> categoryOnlyList = new ArrayList<>();
-        for(Service category: categories) {
-        	if(category.getServiceType() == 1) {
-        	categoryOnlyList.add(category);
-        	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String categoryIdParam = request.getParameter("categoryId");
+        if (categoryIdParam != null) {
+            try {
+                int categoryId = Integer.parseInt(categoryIdParam);
+                Category category = categoryDAO.getCategoryById(categoryId);
+                if (category != null) {
+                    request.setAttribute("category", category);
+                    request.getRequestDispatcher("/View/category.jsp").forward(request, response);
+                } else {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Category not found");
+                }
+            } catch (SQLException e) {
+                throw new ServletException("Database error", e);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid category ID");
+            }
+        } else {
+            try {
+                List<Category> categories = categoryDAO.getAllCategories();
+                request.setAttribute("categories", categories);
+                request.getRequestDispatcher("/View/categories.jsp").forward(request, response);
+            } catch (SQLException e) {
+                throw new ServletException("Database error", e);
+            }
         }
-        request.setAttribute("categories", categories);
-        request.getRequestDispatcher(request.getContextPath() + "/ServiceCategories.jsp").forward(request, response);
     }
-
 }

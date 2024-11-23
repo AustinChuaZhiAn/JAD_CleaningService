@@ -1,195 +1,181 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    // Session check
+    if (session.getAttribute("username") == null || !session.getAttribute("role_id").equals(1)) {
+        response.sendRedirect(request.getContextPath() + "/View/Login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard | Services Management</title>
-    <link href="css/admin-dashboard.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Clean and Clear</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/Admin.css">
+    <style>
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar-header {
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .admin-info {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .admin-info img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #34495e;
+        }
+
+        .nav-links i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f5f6fa;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .stat-card p {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #3498db;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 <body>
-    <%
-        // Session checking
-        String userRole = (String) session.getAttribute("userRole");
-        String userName = (String) session.getAttribute("userName");
-        if (userRole == null || !userRole.equals("ADMIN")) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-    %>
-    <div class="wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
+    <div class="dashboard">
+        <div class="sidebar">
             <div class="sidebar-header">
-                <h3>ServiceHub Admin</h3>
+                <h2>Clean and Clear</h2>
             </div>
-            
-            <div class="profile-info">
-                <div class="profile-image">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-details">
-                    <h4><%= userName %></h4>
-                    <p>Administrator</p>
-                </div>
+            <div class="admin-info">
+                <img src="/api/placeholder/80/80" alt="Admin Avatar">
+                <h3>Welcome, <%= session.getAttribute("username") %></h3>
+                <p>Administrator</p>
             </div>
+            <nav class="nav-links">
+                <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#"><i class="fas fa-users"></i> Users</a>
+                <a href="#"><i class="fas fa-calendar"></i> Bookings</a>
+                <a href="#"><i class="fas fa-broom"></i> Services</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+        </div>
 
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="dashboard.jsp" class="nav-link active">
-                        <i class="fas fa-th-large"></i>
-                        Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="services.jsp" class="nav-link">
-                        <i class="fas fa-cogs"></i>
-                        Services
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="categories.jsp" class="nav-link">
-                        <i class="fas fa-tags"></i>
-                        Categories
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="members.jsp" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        Members
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="logout.jsp" class="nav-link">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </a>
-                </li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="page-header">
-                <h1 class="page-title">Dashboard Overview</h1>
-                <ul class="breadcrumb">
-                    <li>Home</li>
-                    <li>Dashboard</li>
-                </ul>
+        <div class="main-content">
+            <div class="header">
+                <h1>Admin Dashboard</h1>
+                <a href="<%=request.getContextPath()%>/View/Login.jsp" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
 
-            <!-- Statistics Cards -->
-            <div class="dashboard-cards">
-                <%
-                    // Get statistics from your DAO/Service
-                    ServiceDAO serviceDAO = new ServiceDAO();
-                    int totalServices = serviceDAO.getTotalServices();
-                    int totalCategories = serviceDAO.getTotalCategories();
-                    int activeMembers = serviceDAO.getActiveMembers();
-                    double totalRevenue = serviceDAO.getTotalRevenue();
-                %>
-                <div class="card stat-card">
-                    <div class="stat-icon" style="background: var(--primary-color)">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <div class="stat-details">
-                        <h3><%= totalServices %></h3>
-                        <p>Total Services</p>
-                    </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p>125</p>
+                    <small>+12% from last month</small>
                 </div>
-
-                <div class="card stat-card">
-                    <div class="stat-icon" style="background: var(--accent-color)">
-                        <i class="fas fa-tags"></i>
-                    </div>
-                    <div class="stat-details">
-                        <h3><%= totalCategories %></h3>
-                        <p>Categories</p>
-                    </div>
+                <div class="stat-card">
+                    <h3>Active Bookings</h3>
+                    <p>48</p>
+                    <small>Current pending bookings</small>
                 </div>
-
-                <div class="card stat-card">
-                    <div class="stat-icon" style="background: var(--success-color)">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-details">
-                        <h3><%= activeMembers %></h3>
-                        <p>Active Members</p>
-                    </div>
+                <div class="stat-card">
+                    <h3>Total Services</h3>
+                    <p>15</p>
+                    <small>Available service types</small>
                 </div>
-
-                <div class="card stat-card">
-                    <div class="stat-icon" style="background: var(--warning-color)">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="stat-details">
-                        <h3>$<%= String.format("%.2f", totalRevenue) %></h3>
-                        <p>Total Revenue</p>
-                    </div>
+                <div class="stat-card">
+                    <h3>Revenue</h3>
+                    <p>$12,450</p>
+                    <small>This month's earnings</small>
                 </div>
             </div>
 
-            <!-- Services Table -->
-            <div class="table-container">
-                <div class="table-header">
-                    <h2>Services List</h2>
-                    <a href="addService.jsp" class="btn btn-primary">
-                        <i class="fas fa-plus"></i>
-                        Add New Service
-                    </a>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Service Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            List<Service> services = serviceDAO.getAllServices();
-                            for(Service service : services) {
-                        %>
-                        <tr>
-                            <td><%= service.getName() %></td>
-                            <td><%= service.getServiceType().getName() %></td>
-                            <td>$<%= String.format("%.2f", service.getPrice()) %></td>
-                            <td>
-                                <span class="status-badge <%= service.isActive() ? "status-active" : "status-inactive" %>">
-                                    <%= service.isActive() ? "Active" : "Inactive" %>
-                                </span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="editService.jsp?id=<%= service.getId() %>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                        Edit
-                                    </a>
-                                    <a href="javascript:void(0);" onclick="deleteService(<%= service.getId() %>)" class="btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                        Delete
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                    </tbody>
-                </table>
-            </div>
-        </main>
+            <!-- Add more admin content sections here -->
+
+        </div>
     </div>
-
-    <script>
-        function deleteService(id) {
-            if(confirm('Are you sure you want to delete this service?')) {
-                window.location.href = 'deleteService?id=' + id;
-            }
-        }
-    </script>
 </body>
 </html>
