@@ -26,35 +26,11 @@ public class userController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
-//        String action = request.getParameter("action");
-//        
-//        try {
-//            if (action != null) {
-//                switch(action) {
-//                    case "getAll":
-//                        getAllUsers(request, response);
-//                        break;
-//                        
-//                    case "viewProfile":
-//                        viewProfile(request, response);
-//                        break;
-//                        
-//                    default:
-//                        response.sendRedirect(request.getContextPath() + "error.jsp");
-//                        break;
-//                }
-//            } else {
-//                response.sendRedirect(request.getContextPath() + "error.jsp");
-//            }
-//        } catch (SQLException e) {
-//		throw new ServletException(ex);
-//        }
+        // ... existing doGet code ...
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
         String action = request.getParameter("action");
         
         try {
@@ -67,21 +43,17 @@ public class userController extends HttpServlet {
                     case "create":
                         createUser(request, response);
                         break;
-//                        
-//                    case "update":
-//                        updateUser(request, response);
-//                        break;
                         
                     default:
-                        response.sendRedirect(request.getContextPath() + "error.jsp");
+                        response.sendRedirect(request.getContextPath() + "/View/error.jsp");
                         break;
                 }
             } else {
-                response.sendRedirect(request.getContextPath() + "Home.jsp");
+                response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
             }
         } catch (SQLException ex) {
-			throw new ServletException(ex);
-		}
+            throw new ServletException(ex);
+        }
     }
     
     private void verifyUser(HttpServletRequest request, HttpServletResponse response) 
@@ -98,21 +70,20 @@ public class userController extends HttpServlet {
             session.setAttribute("username", user.getUsername());
             session.setAttribute("role_id", user.getRole_id());
             
-            
             switch (user.getRole_id()) {
                 case 1: //Admin Login
-                    response.sendRedirect(request.getContextPath() + "View/AdminPage.jsp");
+                    response.sendRedirect(request.getContextPath() + "/View/AdminPage.jsp");
                     break;
                 case 2: //Member Login
-                    response.sendRedirect(request.getContextPath() + "View/Home.jsp");
+                    response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
                     break;
                 default:
-                    response.sendRedirect(request.getContextPath() + "View/Home.jsp");
+                    response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
             }
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Invalid username or password");  
-            response.sendRedirect(request.getContextPath() + "View/Login.jsp"); 
+            response.sendRedirect(request.getContextPath() + "/View/Login.jsp"); 
         }
     }
     
@@ -127,39 +98,35 @@ public class userController extends HttpServlet {
         UserDetails userDetails = new UserDetails();
         userDetails.setEmail(request.getParameter("email"));
         
-        // Validate phone number if provided
         String phoneNumber = request.getParameter("phone_number");
         if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            //number check
             if (!phoneNumber.matches("\\d+")) {
                 HttpSession session = request.getSession();
                 session.setAttribute("error", "Phone number must contain only numbers");
-                response.sendRedirect(request.getContextPath() + "View/Register.jsp");
+                response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
                 return;
             }
             if (userDAO.getUserDetailsByPhone(phoneNumber) != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("error", "Phone number already registered");
-                response.sendRedirect(request.getContextPath() + "View/Register.jsp");
+                response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
                 return;
             }
             
             userDetails.setPhone_number(phoneNumber);
         }
         
-        //duplicate username check
         if (userDAO.getUserByUsername(newUser.getUsername()) != null) {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Username already exists");
-            response.sendRedirect(request.getContextPath() + "View/Register.jsp");
+            response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
             return;
         }
 
-        //Email check
         if (userDAO.getUserDetailsByEmail(userDetails.getEmail()) != null) {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Email already registered");
-            response.sendRedirect(request.getContextPath() + "View/Register.jsp");
+            response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
             return;
         }
 
@@ -172,49 +139,15 @@ public class userController extends HttpServlet {
             
             switch (user.getRole_id()) {
                 case 1: //Admin Login
-                    response.sendRedirect(request.getContextPath() + "View/AdminPage.jsp");
+                    response.sendRedirect(request.getContextPath() + "/View/AdminPage.jsp");
                     break;
                 default: //Member Login
-                    response.sendRedirect(request.getContextPath() + "View/Home.jsp");
+                    response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
             }
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Registration failed");
-            response.sendRedirect(request.getContextPath() + "View/Register.jsp");
+            response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
         }
     }
-    
-//    private void updateUser(HttpServletRequest request, HttpServletResponse response) 
-//            throws SQLException, ServletException, IOException {
-//            
-//        UserAccount user = new UserAccount();
-//        user.setUser_id(Integer.parseInt(request.getParameter("user_id")));
-//        user.setUsername(request.getParameter("username"));
-//        user.setPassword(request.getParameter("password"));
-//        user.setRole_id(Integer.parseInt(request.getParameter("role_id")));
-//        
-//        if (userDAO.updateUser(user)) {
-//            response.sendRedirect(request.getContextPath() + "profile.jsp?updated=true");
-//        } else {
-//            request.setAttribute("error", "Update failed");
-//            request.getRequestDispatcher("profile.jsp").forward(request, response);
-//        }
-//    }
-    
-//    private void getAllUsers(HttpServletRequest request, HttpServletResponse response) 
-//            throws SQLException, ServletException, IOException {
-//            
-//        request.setAttribute("userList", userDAO.getAllUser());
-//        request.getRequestDispatcher("userList.jsp").forward(request, response);
-//    }
-//    
-//    private void viewProfile(HttpServletRequest request, HttpServletResponse response) 
-//            throws SQLException, ServletException, IOException {
-//            
-//        HttpSession session = request.getSession();
-//        int userId = (int) session.getAttribute("user_id");
-//        
-//        // Additional profile logic here if needed
-//        request.getRequestDispatcher("profile.jsp").forward(request, response);
-//    }
 }
