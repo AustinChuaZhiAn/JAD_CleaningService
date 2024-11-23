@@ -11,8 +11,8 @@ body {
     justify-content: center;
     align-items: flex-start;
     margin: 20px auto;
-    max-width: 1200px; /* Limits the container width */
-    padding: 0 15px; /* Adds horizontal padding */
+    max-width: 1200px; 
+    padding: 0 15px; 
 }
 
 /* Flexbox row layout for cards */
@@ -25,10 +25,10 @@ body {
 
 /* Each card takes 3 columns in a 12-column grid */
 .col-3 {
-    flex: 0 0 25%; /* 3 columns = 25% width */
+    flex: 0 0 25%;
     max-width: 25%;
-    box-sizing: border-box; /* Includes padding/border in width calculation */
-    padding: 10px; /* Adds spacing inside the column */
+    box-sizing: border-box;
+    padding: 10px; 
 }
 
 /* Styling the card */
@@ -39,7 +39,7 @@ body {
     background-color: #f9f9f9;
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer; /* Indicates the card is clickable */
+    cursor: pointer;
 }
 
 .category-card:hover {
@@ -51,4 +51,11 @@ body {
 .category-card-link {
     text-decoration: none;
     color: inherit;
+}
+
+.category-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; 
+    margin-bottom: 10px;
 }

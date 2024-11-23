@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="Model.*, java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,17 +14,36 @@
 	href="<%=request.getContextPath()%>/css/CreateAddress.css">
 </head>
 <body>
+	<%
+	String username = (String) session.getAttribute("username");
+	if (username == null) {
+		String contextPath = request.getContextPath();
+		String loginPage = contextPath + "/View/Login.jsp";
+		response.sendRedirect(loginPage);
+	}
+
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script>
+        alert('<%=request.getAttribute("errorMessage")%>
+		');
+	</script>
+	<%
+	}
+
+	List<AddressType> addressTypeList = (List<AddressType>) request.getAttribute("addressType");
+	%>
 	<%@ include file="Header.jsp"%>
-	<form action="<%=request.getContextPath()%>/AddAddressServlet"
+	<form
+		action="<%=request.getContextPath()%>/Controller/userController.jsp?action=AddAddress"
 		method="post">
 		<div class="form-group">
 			<label for="address_type_id">Address Type:</label> <select
 				id="address_type_id" name="address_type_id">
 				<%
-				List<AddressType> addressTypes = (List<AddressType>) request.getAttribute("addressTypes");
-				for (AddressType type : addressTypes) {
+				for (AddressType type : addressTypeList) {
 				%>
-				<option value="<%=type.getId()%>"><%=type.getName()%></option>
+				<option value="<%=type.getAddress_type_id()%>"><%=type.getAddress_type()%></option>
 				<%
 				}
 				%>

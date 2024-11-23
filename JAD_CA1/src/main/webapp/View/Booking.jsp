@@ -12,8 +12,8 @@
 <%
 List<Cleaner> listCleaner = (List<Cleaner>) request.getAttribute("cleanerList");
 List<Address> listAddresses = (List<Address>) request.getAttribute("addressList");
-UserAccount user = (UserAccount) session.getAttribute("User");
-if (user == null) {
+String username = (String) session.getAttribute("username");
+if (username == null) {
     String contextPath = request.getContextPath();
     String loginPage = contextPath + "/View/Login.jsp";
     response.sendRedirect(loginPage);

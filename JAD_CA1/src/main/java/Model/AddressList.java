@@ -101,37 +101,20 @@ public class AddressList implements AddressCRUD {
 		return address;
 	}
 
-	@Override
-	public void updateAddress(Address address) throws SQLException {
-		String sql = """
-				UPDATE Address SET user_details = ?, postal_code = ?, block_number = ?,
-					street_name = ?, unit_number = ?, building_name = ?, address_type_id = ?
-				WHERE address = ?;
-				""" ;
+	
+	public List<AddressType> getAllAddressType() throws SQLException{
+		List<AddressType> addresstype = new ArrayList<>();
+		String sql = "SELECT * FROM addresstype";
 
-		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DatabaseConnection.getConnection();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
 
-			pstmt.setInt(1, address.getUser_details());
-			pstmt.setInt(2, address.getPostal_code());
-			pstmt.setString(3, address.getBlock_number());
-			pstmt.setString(4, address.getStreet_name());
-			pstmt.setString(5, address.getUnit_number());
-			pstmt.setString(6, address.getBuilding_name());
-			pstmt.setInt(7, address.getAddress_type_id());
-			pstmt.setInt(8, address.getAddress());
-
-			pstmt.executeUpdate();
+			while (rs.next()) {
+				addresstype.add(new AddressType(rs.getInt("address_type_id"), rs.getString("addres_type")));
+			}
 		}
+		return addresstype;
 	}
-
-	@Override
-	public void deleteAddress(int id) throws SQLException {
-		String sql = "DELETE FROM address WHERE address = ?";
-
-		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-			pstmt.setInt(1, id);
-			pstmt.executeUpdate();
-		}
-	}
+    
 }

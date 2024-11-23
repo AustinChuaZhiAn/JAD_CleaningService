@@ -14,7 +14,15 @@
 <body>
 	<%@ include file="Header.jsp"%>
 	<%
+	String username = (String) session.getAttribute("username");
+	if (username == null) {
+	    String contextPath = request.getContextPath();
+	    String loginPage = contextPath + "/View/Login.jsp";
+	    response.sendRedirect(loginPage);
+	}
+	
 	UserAccount user = (UserAccount) request.getAttribute("user");
+	UserDetails profileDetails = (UserDetails) request.getAttribute("userDetails"); 
 	List<Booking> bookingList = (List<Booking>) request.getAttribute("bookingList");
 	List<Cleaner> cleanerList = (List<Cleaner>) request.getAttribute("cleanerList");
 	List<Address> addressList = (List<Address>) request.getAttribute("addressList");
@@ -22,18 +30,18 @@
 	<div class="user-details">
 		<h2>User Details</h2>
 		<div class="detail">
-			<label>Name:</label> <span><%=user.getName()%></span>
+			<label>Name:</label> <span><%=user.getUsername()%></span>
 		</div>
 		<div class="detail">
-			<label>Email:</label> <span><%=user.getEmail()%></span>
+			<label>Email:</label> <span><%=profileDetails.getEmail()%></span>
 		</div>
 		<div class="detail">
-			<label>Phone Number:</label> <span><%=user.getPhoneNumber()%></span>
+			<label>Phone Number:</label> <span><%=profileDetails.getPhone_number()%></span>
 		</div>
 		<div class="actions">
-			<a href="<%=request.getContextPath()%>/EditUserServlet"
+			<a href="<%=request.getContextPath()%>/View/UpdateProfile.jsp"
 				class="edit-btn">Edit</a> <a
-				href="<%=request.getContextPath()%>/AddAddressServlet"
+				href="<%=request.getContextPath()%>/Controller/"
 				class="add-address-btn">Add Address</a>
 		</div>
 	</div>
@@ -50,8 +58,8 @@
 			%>
 			<div class="booking-item">
 				<span class="booking-id">Booking #<%=i + 1%></span> <span
-					class="booking-time"><%=booking.getBookingTime()%></span> <span
-					class="booking-date"><%=booking.getBookingDate()%></span> <span
+					class="booking-time"><%=booking.getTime()%></span> <span
+					class="booking-date"><%=booking.getDate()%></span> <span
 					class="cleaner-name"><%=cleaner != null ? cleaner.getCleaner_name() : "N/A"%></span>
 				<span class="cleaner-contact"><%=cleaner != null ? cleaner.getCleaner_contact() : "N/A"%></span>
 			</div>
@@ -89,8 +97,6 @@
 			}
 			%>
 		</div>
-		<a href="<%=request.getContextPath()%>/AddAddressServlet"
-			class="add-address-btn">Add Address</a>
 	</div>
 	<%@ include file="Footer.jsp"%>
 </body>

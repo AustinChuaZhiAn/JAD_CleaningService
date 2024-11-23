@@ -6,4 +6,5 @@ import java.util.List;
 public interface CleanerRead {
 	//Read
     List<Cleaner> getAllCleaner() throws SQLException;
+    Cleaner getCleanerByBookingId(int id) throws SQLException;
 }

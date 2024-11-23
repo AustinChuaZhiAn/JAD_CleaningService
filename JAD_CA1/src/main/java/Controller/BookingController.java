@@ -24,13 +24,13 @@ public class BookingController extends HttpServlet {
 	private AddressCRUD addressList;
 	private BookingCRUD bookingList;
 	private CleanerRead cleanerList;
-	private ServiceCRUD serviceList;
+	private ServiceCategoryCRUD serviceList;
 
 	public void init() {
 		addressList = new AddressList();
 		bookingList = new BookingList();
 		cleanerList = new CleanerList();
-		serviceList = new ServiceList();
+		serviceList = new ServiceCategoryList();
 	}
 
 	/**
@@ -100,16 +100,26 @@ public class BookingController extends HttpServlet {
 		
 		int booking_id = bookingList.addBooking(user_id, address_id, time, date, cleaner_id, service_id, special_request);
 		
-		session.invalidate();
+	    session.removeAttribute("category_id");
+	    session.removeAttribute("service_type_id");
+	    session.removeAttribute("frequency_id");
+	    
 		session.setAttribute("booking_id", booking_id);
 		response.sendRedirect(request.getContextPath() + "/receipt.jsp"); // ADD YOUR PAGE URL HERE
 	}
 
 	private void listBooking(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		if (username == null) {
+		    String contextPath = request.getContextPath();
+		    String loginPage = contextPath + "/View/Login.jsp";
+		    response.sendRedirect(loginPage);
+		}
+		
 		String frequency_idStr = request.getParameter("frequency");
 		int frequency_id = Integer.parseInt(frequency_idStr);
-		HttpSession session = request.getSession();
 		int user_id = (int) session.getAttribute("user_id");
 		session.setAttribute("frequency_id", frequency_id);
 

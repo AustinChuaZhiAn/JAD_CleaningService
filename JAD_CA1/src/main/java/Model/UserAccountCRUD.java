@@ -16,4 +16,8 @@ public interface UserAccountCRUD {
 	UserAccount getUserByUsername(String username) throws SQLException;
 	UserDetails getUserDetailsByEmail(String email) throws SQLException;
 	UserDetails getUserDetailsByPhone(String phone) throws SQLException;
+	
+	UserDetails getUserDetailsByUserId(int id) throws SQLException;
+	void updateUsernameByUserId(String username, int id) throws SQLException;
+	void updateUserDetailsByUserId(String email, String phone, int id) throws SQLException;
 }

@@ -24,9 +24,10 @@
                         // Loop through categories and display each
                         for (Service category : categories) {
         %>
-            <a href="<%=request.getContextPath()%>/Controller/ServiceTypeController.java?categoryName=<%= category.getCategoryName()%>&category_id=<%= category.getCategoryId() %>" class="category-card-link">
+            <a href="<%=request.getContextPath()%>/Controller/ServiceTypeController.java?categoryName=<%= category.getCategory_name()%>&category_id=<%= category.getCategory_id() %>" class="category-card-link">
                 <div class="category-card">
-                    <h3 class="category-title"><%= category.getCategoryName() %></h3>
+                	<img src="<%= category.getCategory_img_url() %>" alt="<%= category.getCategory_name() %> image" class="category-image">
+                    <h3 class="category-title"><%= category.getCategory_name() %></h3>
                     <p class="category-description"><%= category.getDescription() %></p>
                 </div>
             </a>

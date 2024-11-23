@@ -21,9 +21,11 @@ import Model.*;
 public class ServiceTypeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ServiceTypeRead serviceTypeList;
+	private ServiceCategoryCRUD categoryList;
 
 	public void init() {
 		serviceTypeList = new ServiceTypeList();
+		categoryList = new ServiceCategoryList();
 	}
     /**
      * @see HttpServlet#HttpServlet()
@@ -64,14 +66,14 @@ public class ServiceTypeController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("category_id", category_id);
     	
-        List<Service> categories = categoryCRUD.getAllCategories();
+        List<Service> categories = categoryList.getAllServices();
         List<ServiceType> serviceType = serviceTypeList.getAllServiceType();
         ArrayList<ServiceType>  requiredServiceType = new ArrayList<>();
         
         for(Service category: categories) {
-        	if(category.getCategoryName() == categoryName) {
+        	if(category.getCategory_name() == categoryName) {
         		for (ServiceType serviceTypeForPage : serviceType) {
-        			if(serviceTypeForPage.getService_type_id() == category.getServicetype()) {
+        			if(serviceTypeForPage.getService_type_id() == category.getService_type_id()) {
         				requiredServiceType.add(serviceTypeForPage);
         			}
         		}

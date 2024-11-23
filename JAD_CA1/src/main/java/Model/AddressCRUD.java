@@ -12,10 +12,6 @@ public interface AddressCRUD {
     // Read
     List<Address> getAddressesByUserId(int id) throws SQLException;
     List<Address> getAllAddress() throws SQLException;
+    List<AddressType> getAllAddressType() throws SQLException;
     
-    // Update
-    void updateAddress(Address address) throws SQLException;
-    
-    // Delete
-    void deleteAddress(int id) throws SQLException;
 }
