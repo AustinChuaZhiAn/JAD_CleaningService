@@ -1,0 +1,30 @@
+@charset "UTF-8";
+.form-group {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 15px;
+}
+.form-group label {
+font-weight: bold;
+flex-basis: 30%;
+}
+.form-group input, .form-group select {
+flex-basis: 65%;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+.actions {
+display: flex;
+justify-content: flex-end;
+margin-top: 20px;
+}
+.actions button {
+background-color: #4CAF50;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
