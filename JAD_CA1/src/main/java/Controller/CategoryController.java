@@ -9,17 +9,19 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import Model.Category;
-import Model.CategoryDAO;
-import Model.CategoryDAOImpl;
+import Model.*;
 
 @WebServlet("/CategoryController")
 public class CategoryController extends HttpServlet {
-    private CategoryDAO categoryDAO;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private CategoryDAO categoryDAO;
 
     public void init() {
         categoryDAO = new CategoryDAOImpl();
-    }
+        }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,8 +44,9 @@ public class CategoryController extends HttpServlet {
         } else {
             try {
                 List<Category> categories = categoryDAO.getAllCategories();
-                request.setAttribute("categories", categories);
-                request.getRequestDispatcher("/View/categories.jsp").forward(request, response);
+                request.setAttribute("Categories", categories);
+                
+                request.getRequestDispatcher("/View/ServiceCategories.jsp").forward(request, response);
             } catch (SQLException e) {
                 throw new ServletException("Database error", e);
             }

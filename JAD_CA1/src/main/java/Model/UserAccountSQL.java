@@ -265,7 +265,7 @@ public class UserAccountSQL implements UserAccountCRUD {
 	
 	public void updateUserDetailsByUserId(String email, String phone, int id) throws SQLException {
 		String sql = "UPDATE userdetails SET email = ?,"
-				+ ", phone_number = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
+				+ " phone_number = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {

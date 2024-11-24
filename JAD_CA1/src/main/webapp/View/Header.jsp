@@ -14,7 +14,7 @@
 		if (session.getAttribute("user_id") != null) {
 		%>
 		<a
-			href="<%=request.getContextPath()%>/View/Profile.jsp?action=viewProfile"
+			href="<%=request.getContextPath()%>/userController"
 			class="nav-button">Your Bookings</a>
 		<%
 		} else {

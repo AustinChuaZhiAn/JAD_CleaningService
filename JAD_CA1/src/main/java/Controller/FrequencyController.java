@@ -61,14 +61,19 @@ public class FrequencyController extends HttpServlet {
 
 	private void listFrequency(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
-		String service_type_idStr = request.getParameter("serviceType");
-		int service_type_id = Integer.parseInt(service_type_idStr);
 		HttpSession session = request.getSession();
-		session.setAttribute("service_type_id", service_type_id);
+		
+		if(session.getAttribute("service_type_id") == null) {
+			String service_type_idStr = request.getParameter("serviceType");
+			int service_type_id = Integer.parseInt(service_type_idStr);
+			session.setAttribute("service_type_id", service_type_id);
+		}
+		
 
 		List<Frequency> frequency = frequencyList.getAllFrequency();
 		request.setAttribute("frequencyList", frequency);
-		request.getRequestDispatcher(request.getContextPath() + "/FrequencyOption.jsp").forward(request, response);
+		request.getRequestDispatcher("/View/FrequencyOption.jsp").forward(request, response);
+		
 	}
 
 }

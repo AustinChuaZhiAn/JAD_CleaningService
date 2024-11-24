@@ -8,7 +8,7 @@ import utils.DatabaseConnection;
 public class FrequencyList implements FrequencyRead {
 	@Override
 	public Frequency getFrequencyById(int id) throws SQLException {
-		String sql = "SELECT * FROM frequency WHERE frequency_id = ?";
+		String sql = "SELECT * FROM frequencyoption WHERE frequency_id = ?";
 		try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, id);
@@ -25,7 +25,7 @@ public class FrequencyList implements FrequencyRead {
 	@Override
 	public List<Frequency> getAllFrequency() throws SQLException {
 		List<Frequency> frequency = new ArrayList<>();
-		String sql = "SELECT * FROM frequency";
+		String sql = "SELECT * FROM frequencyoption";
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();

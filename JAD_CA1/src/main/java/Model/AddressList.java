@@ -16,7 +16,7 @@ public class AddressList implements AddressCRUD {
 			, String unit_number, String building_name, int address_type_id) throws SQLException {
 	    String sql = """
 	        INSERT INTO address 
-	        (user_details, postal_code, block_number, street_name, unit_number, building_name, address_type_id) 
+	        (user_details_id, postal_code, block_number, street_name, unit_number, building_name, address_type_id) 
 	        VALUES (?, ?, ?, ?, ?, ?, ?)
 	    """;
 	    
@@ -48,12 +48,12 @@ public class AddressList implements AddressCRUD {
 	@Override
 	public List<Address> getAddressesByUserId(int userId) throws SQLException {
 	    String sql = """
-	        SELECT a.address, a.user_details, a.postal_code, a.block_number, a.street_name, 
+	        SELECT a.address, a.user_details_id, a.postal_code, a.block_number, a.street_name, 
 	               a.unit_number, a.building_name, a.address_type_id
 	        FROM address a
-	        JOIN user_details ud ON a.user_details = ud.id
-	        JOIN user u ON ud.user_id = u.id
-	        WHERE u.id = ?;
+	        JOIN userdetails ud ON a.user_details_id = ud.user_details_id
+	        JOIN user u ON ud.user_id = u.user_id
+	        WHERE u.user_id = ?;
 	    """;
 
 	    List<Address> addresses = new ArrayList<>();
@@ -67,7 +67,7 @@ public class AddressList implements AddressCRUD {
 	            while (rs.next()) {
 	                Address address = new Address(
 	                    rs.getInt("address"),
-	                    rs.getInt("user_details"),
+	                    rs.getInt("user_details_id"),
 	                    rs.getInt("postal_code"),
 	                    rs.getString("block_number"),
 	                    rs.getString("street_name"),
@@ -93,7 +93,7 @@ public class AddressList implements AddressCRUD {
 				ResultSet rs = stmt.executeQuery(sql)) {
 
 			while (rs.next()) {
-				address.add(new Address(rs.getInt("address"), rs.getInt("user_details")
+				address.add(new Address(rs.getInt("address"), rs.getInt("user_details_id")
 						, rs.getInt("postal_code"), rs.getString("block_number"), rs.getString("street_name")
 						, rs.getString("unit_number"), rs.getString("building_name"), rs.getInt("address_type_id")));
 			}
@@ -111,7 +111,7 @@ public class AddressList implements AddressCRUD {
 				ResultSet rs = stmt.executeQuery(sql)) {
 
 			while (rs.next()) {
-				addresstype.add(new AddressType(rs.getInt("address_type_id"), rs.getString("addres_type")));
+				addresstype.add(new AddressType(rs.getInt("address_type_id"), rs.getString("address_type")));
 			}
 		}
 		return addresstype;

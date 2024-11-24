@@ -3,44 +3,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Clean And Clear | Categories</title>
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Header.css">
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Footer.css">
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/ServiceCategories.css">
+    <meta charset="UTF-8">
+    <title>Clean And Clear | Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Header.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Footer.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/ServiceCategories.css">
+    
 </head>
 <body>
     <%@ include file="Header.jsp" %>
 
-    <%
-    // Fetch the categories from the request attribute
-            List<Service> categories = (List<Service>) request.getAttribute("categories");
-    %>
+   <%
+   List<Category> categories = (List<Category>) request.getAttribute("Categories");
+   %>
 
-    <div class="category-container">
-        <%
-        // Check if categories are available
-                    if (categories != null && !categories.isEmpty()) {
-                        // Loop through categories and display each
-                        for (Service category : categories) {
-        %>
-            <a href="<%=request.getContextPath()%>/Controller/ServiceTypeController.java?categoryName=<%= category.getCategory_name()%>&category_id=<%= category.getCategory_id() %>" class="category-card-link">
-                <div class="category-card">
-                	<img src="<%= category.getCategory_img_url() %>" alt="<%= category.getCategory_name() %> image" class="category-image">
-                    <h3 class="category-title"><%= category.getCategory_name() %></h3>
-                    <p class="category-description"><%= category.getDescription() %></p>
-                </div>
-            </a>
-        <% 
-                } // End of the for loop
-            } else {
-        %>
-            <p>No categories available.</p>
-        <% 
-            }
-        %>
-    </div>
+   <div class="categories-section">
+       <div class="container">
+           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
+               <% if (categories != null && !categories.isEmpty()) {
+                   for (Category category : categories) { %>
+                       <div class="col">
+                           <a href="<%=request.getContextPath()%>/ServiceTypeController?categoryName=<%= category.getCategory_name()%>&category_id=<%= category.getCategory_id() %>" 
+                              class="card-link">
+                               <div class="card category-card h-100">
+                                   <div class="card-body">
+                                       <img src="<%= category.getImg_url() %>" 
+                                            alt="<%= category.getCategory_name() %> image" 
+                                            class="category-image mb-4">
+                                       <h3 class="card-title"><%= category.getCategory_name() %></h3>
+                                       <p class="card-text text-body"><%= category.getDescription() %></p>
+                                   </div>
+                               </div>
+                           </a>
+                       </div>
+                   <% }
+               } else { %>
+                   <div class="col-12">
+                       <p class="text-center">No categories available.</p>
+                   </div>
+               <% } %>
+           </div>
+       </div>
+   </div>
 
-    <%@ include file="Footer.jsp" %>
+   <%@ include file="Footer.jsp" %>
+   
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

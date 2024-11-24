@@ -24,7 +24,7 @@
                 // Loop through categories and display each
                 for (ServiceType serviceType: serviceTypeList) {
         %>
-            <a href="<%=request.getContextPath()%>/Controller/FrequencyController.java?serviceType=<%= serviceType.getService_type_id() %>" class="category-card-link">
+            <a href="<%=request.getContextPath()%>/Controller/FrequencyController?serviceType=<%= serviceType.getService_type_id() %>" class="category-card-link">
                 <div class="category-card">
                     <h3 class="category-title"><%= serviceType.getService_type() %></h3>
                 </div>
@@ -33,7 +33,7 @@
                 } // End of the for loop
             } else {
         %>
-            <p>No categories available.</p>
+            <p>No Service Type available.</p>
         <% 
             }
         %>

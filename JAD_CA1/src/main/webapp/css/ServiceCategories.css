@@ -1,61 +1,44 @@
 @charset "UTF-8";
 
-body {
-    margin: 0;
-    color: #e6ffcc;
-}
-
-/* Center the category container */
-.category-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    margin: 20px auto;
-    max-width: 1200px; 
-    padding: 0 15px; 
-}
-
-/* Flexbox row layout for cards */
-.row {
-    display: flex;
-    flex-wrap: wrap; /* Ensures cards wrap to the next row */
-    gap: 15px; /* Adds spacing between cards */
-    justify-content: space-evenly; /* Aligns cards evenly */
-}
-
-/* Each card takes 3 columns in a 12-column grid */
-.col-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-    box-sizing: border-box;
-    padding: 10px; 
-}
-
-/* Styling the card */
 .category-card {
-    padding: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+	cursor: pointer;
+	height: 100%;
+	background-color: #f9f9f9;
 }
 
 .category-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Link styling */
-.category-card-link {
-    text-decoration: none;
-    color: inherit;
+	transform: scale(1.05);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .category-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px; 
-    margin-bottom: 10px;
+	border-radius: 8px;
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
+}
+
+.card-link {
+	text-decoration: none;
+	color: inherit;
+}
+
+.card-body {
+	padding: 3rem;
+	margin: 5rem;
+}
+
+.card-title {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.card-text {
+	font-size: 1.1rem;
+}
+
+.categories-section {
+	min-height: calc(100vh - 200px);
+	padding: 4rem 0;
 }

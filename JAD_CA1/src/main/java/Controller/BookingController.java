@@ -105,29 +105,44 @@ public class BookingController extends HttpServlet {
 	    session.removeAttribute("frequency_id");
 	    
 		session.setAttribute("booking_id", booking_id);
-		response.sendRedirect(request.getContextPath() + "/receipt.jsp"); // ADD YOUR PAGE URL HERE
+		response.sendRedirect(request.getContextPath() + "/receipt"); // ADD YOUR PAGE URL HERE
 	}
 
 	private void listBooking(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
-		if (username == null) {
+		if (username == null || username.isEmpty()) {
+		    System.out.println("Redirecting to login page");
 		    String contextPath = request.getContextPath();
 		    String loginPage = contextPath + "/View/Login.jsp";
 		    response.sendRedirect(loginPage);
+		    return;
+		} else {
+		    System.out.println("Username is present: " + username);
 		}
 		
-		String frequency_idStr = request.getParameter("frequency");
+		String frequency_idStr = request.getParameter("frequency_id");
 		int frequency_id = Integer.parseInt(frequency_idStr);
-		int user_id = (int) session.getAttribute("user_id");
+		
+		Integer user_id = (Integer) session.getAttribute("user_id");
+		if (user_id == null || user_id == 0) {
+		    System.out.println("Redirecting to login page");
+		    String contextPath = request.getContextPath();
+		    String loginPage = contextPath + "/View/Login.jsp";
+		    response.sendRedirect(loginPage);
+		    return;
+		} else {
+		    System.out.println("user_id is present");
+		}
+		
 		session.setAttribute("frequency_id", frequency_id);
 
 		List<Address> listAddress = addressList.getAddressesByUserId(user_id);
 		List<Cleaner> listCleaner = cleanerList.getAllCleaner();
 		request.setAttribute("cleanerList", listCleaner);
 		request.setAttribute("addressList", listAddress);
-		request.getRequestDispatcher(request.getContextPath() + "/Booking.jsp").forward(request, response);
+		request.getRequestDispatcher("/View/Booking.jsp").forward(request, response);
 	}
 
 }

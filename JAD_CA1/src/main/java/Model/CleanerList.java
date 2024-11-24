@@ -29,8 +29,8 @@ public class CleanerList implements CleanerRead {
 	    String sql = """
 	        SELECT c.*
 	        FROM cleaner c
-	        INNER JOIN booking b ON c.id = b.cleaner_id
-	        WHERE b.id = ?;
+	        INNER JOIN booking b ON c.cleaner_id = b.cleaner_id
+	        WHERE b.booking_id = ?;
 	        """;
 
 	    try (Connection conn = DatabaseConnection.getConnection();
