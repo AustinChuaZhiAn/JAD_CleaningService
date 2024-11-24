@@ -123,7 +123,7 @@ if (request.getAttribute("errorMessage") != null) {
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save me-2"></i>Save Changes
                                 </button>
-                                <a href="<%=request.getContextPath()%>/View/Profile.jsp" class="btn btn-secondary">
+                                <a href="<%=request.getContextPath()%>/userController" class="btn btn-secondary">
                                     <i class="fas fa-arrow-left me-2"></i>Back to Profile
                                 </a>
                             </div>
