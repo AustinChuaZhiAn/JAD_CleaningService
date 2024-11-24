@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface UserAccountCRUD {
@@ -19,4 +20,7 @@ public interface UserAccountCRUD {
     UserDetails getUserDetailsByUserId(int id) throws SQLException;
     void updateUsernameByUserId(String username, int id) throws SQLException;
     void updateUserDetailsByUserId(String email, String phone, int id) throws SQLException;
+    ArrayList<UserAccount> getAllUsers() throws SQLException;	
+    boolean isValidRole(int roleId) throws SQLException;
+    boolean updateUserRole(int userId, int roleId) throws SQLException;
 }

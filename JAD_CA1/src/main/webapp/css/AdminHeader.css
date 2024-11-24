@@ -1,84 +1,137 @@
 @charset "UTF-8";
-       :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --success-color: #28a745;
-            --info-color: #17a2b8;
-        }
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --hover-primary: #0056b3;
+    --active-color: #0d6efd;
+    --disabled-opacity: 0.8;
+}
 
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
 
-        .navbar {
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color) !important;
-        }
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color) !important;
+}
 
-        .navbar-brand i {
-            color: var(--primary-color);
-            margin-right: 10px;
-        }
+.navbar-brand i {
+    color: var(--primary-color);
+    margin-right: 10px;
+}
 
-        .nav-link {
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            color: var(--secondary-color) !important;
-            transition: all 0.3s ease;
-        }
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    color: var(--secondary-color) !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
 
-        .nav-link:hover {
-            color: var(--primary-color) !important;
-            transform: translateY(-2px);
-        }
+.nav-link:not(.active):hover {
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+}
 
-        .nav-link i {
-            margin-right: 8px;
-        }
+.nav-link i {
+    margin-right: 8px;
+}
 
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            border: none;
-            transition: all 0.3s ease;
-        }
+/* Active nav link styles */
+.nav-link.active {
+    color: var(--active-color) !important;
+    font-weight: bold;
+    pointer-events: none;
+    cursor: default;
+    opacity: var(--disabled-opacity);
+    transform: none;
+    position: relative;
+}
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+/* Prevent hover effects on active links */
+.nav-link.active:hover,
+.nav-link.active:focus,
+.nav-link.active:active {
+    transform: none;
+    color: var(--active-color) !important;
+}
 
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-        }
+/* Add subtle indicator for active state */
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background-color: var(--active-color);
+    border-radius: 2px;
+}
 
-        .welcome-section {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-        }
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    border: none;
+    transition: all 0.3s ease;
+}
 
-        .logout-btn {
-            background-color: #dc3545;
-            color: white !important;
-            border-radius: 20px;
-            padding: 8px 20px !important;
-        }
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
 
-        .logout-btn:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.welcome-section {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white !important;
+    border-radius: 20px;
+    padding: 8px 20px !important;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Add smooth transition for all interactive states */
+.nav-link,
+.logout-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .nav-link.active::after {
+        left: 0;
+        right: 0;
+    }
+    
+    .nav-link {
+        padding: 0.75rem 1rem;
+    }
+}

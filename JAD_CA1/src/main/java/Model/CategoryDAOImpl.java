@@ -85,7 +85,7 @@ public class CategoryDAOImpl implements CategoryDAO {
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, category.getCategory_name());
                 pstmt.setString(2, category.getDescription());
-                pstmt.setInt(3, category.getImg_id()); // Now we just use the img_id
+                pstmt.setInt(3, category.getImg_id()); 
                 
                 int affectedRows = pstmt.executeUpdate();
                 if (affectedRows > 0) {

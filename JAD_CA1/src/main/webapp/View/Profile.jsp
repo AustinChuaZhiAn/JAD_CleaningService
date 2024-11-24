@@ -69,6 +69,9 @@
                     <a href="<%=request.getContextPath()%>/userController?action=AddAddress" class="btn btn-success">
                         <i class="fas fa-plus"></i> Add Address
                     </a>
+                    <a href="<%=request.getContextPath()%>/View/Login.jsp" class="btn btn-danger">
+    <i class="fas fa-sign-out-alt"></i> Logout
+</a>
                 </div>
             </div>
         </div>

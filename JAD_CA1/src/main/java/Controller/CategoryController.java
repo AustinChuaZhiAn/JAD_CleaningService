@@ -47,7 +47,9 @@ public class CategoryController extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         try {
-
+            if (action == null) {
+                action = "list";
+            }
             switch (action) {
             case "view":
             	List<Category> categories = categoryDAO.getAllCategory();

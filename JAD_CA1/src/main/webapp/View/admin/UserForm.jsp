@@ -55,7 +55,7 @@
                             <% session.removeAttribute("error"); %>
                         <% } %>
                         
-                        <form action="${pageContext.request.contextPath}/userController" method="POST">
+                        <form action="${pageContext.request.contextPath}/adminController" method="POST">
                             <input type="hidden" name="action" value="<%= isEdit ? "edit" : "create" %>">
                             <% if (isEdit) { %>
                                 <input type="hidden" name="user_id" value="<%= userId %>">

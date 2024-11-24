@@ -2,6 +2,7 @@ package Controller;
 
 import Model.CategoryDAOImpl;
 import Model.UserAccount;
+import Model.UserDetails;
 import Model.UserAccountSQL;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,25 +12,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private CategoryDAOImpl categoryDAO;
     private UserAccountSQL userDAO;
-
+    private CategoryDAOImpl categoryDAO;
        
     public AdminController() {
         super();
-        categoryDAO = new CategoryDAOImpl();
         userDAO = new UserAccountSQL();
+        categoryDAO = new CategoryDAOImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        // Changed to check role_id instead of userId and role
         if (session.getAttribute("role_id") == null || 
             !session.getAttribute("role_id").equals(1)) {
             response.sendRedirect(request.getContextPath() + "/View/Login.jsp");
@@ -37,25 +36,26 @@ public class AdminController extends HttpServlet {
         }
 
         try {
-            // Get counts from respective DAOs
-            int userCount = userDAO.getTotalUser();
-            int categoryCount = categoryDAO.getTotalCategory();
+            String action = request.getParameter("action");
+            if (action == null) {
+                // Regular dashboard display if no action
+                displayDashboard(request, response);
+                return;
+            }
 
-            // Set attributes for the JSP
-            request.setAttribute("userCount", userCount);
-            request.setAttribute("categoryCount", categoryCount);
-
-            // Forward to admin dashboard JSP
-            request.getRequestDispatcher("/View/admin/AdminPage.jsp").forward(request, response);
+            switch (action) {
+                case "list":
+                    showUserList(request, response);
+                    break;
+                default:
+                    displayDashboard(request, response);
+                    break;
+            }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            // Set error message
-            request.setAttribute("errorMessage", "Error loading dashboard data: " + e.getMessage());
-            request.getRequestDispatcher("/View/Home.jsp").forward(request, response);
+            handleError(request, response, e);
         }
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -66,6 +66,12 @@ public class AdminController extends HttpServlet {
                     case "verify":
                         verifyUser(request, response);
                         break;
+                    case "updateUser":
+                        updateUser(request, response);
+                        break;
+                    case "deleteUser":
+                        deleteUser(request, response);
+                        break;
                     default:
                         response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
                         break;
@@ -74,11 +80,10 @@ public class AdminController extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
             }
         } catch (SQLException ex) {
-            throw new ServletException(ex);
+            handleError(request, response, ex);
         }
-        // Remove the doGet(request, response) call
     }
-    
+
     private void verifyUser(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, ServletException, IOException {
             
@@ -94,11 +99,10 @@ public class AdminController extends HttpServlet {
             session.setAttribute("role_id", user.getRole_id());
             
             switch (user.getRole_id()) {
-                case 1: //Admin Login
-                    // Instead of direct JSP redirect, redirect to the servlet
+                case 1: // Admin Login
                     response.sendRedirect(request.getContextPath() + "/AdminController");
                     break;
-                case 2: //Member Login
+                case 2: // Member Login
                     response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
                     break;
                 default:
@@ -110,5 +114,70 @@ public class AdminController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/View/Login.jsp"); 
         }
     }
-    
+
+    private void updateUser(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, IOException {
+        HttpSession session = request.getSession();
+        try {
+            int userId = Integer.parseInt(request.getParameter("user_id"));
+            int roleId = Integer.parseInt(request.getParameter("role_id"));
+
+            // Prevent changing own role
+            if (userId == (Integer)session.getAttribute("user_id")) {
+                session.setAttribute("error", "Cannot modify your own role");
+            } else if (userDAO.updateUserRole(userId, roleId)) {
+                session.setAttribute("success", "User role updated successfully");
+            } else {
+                session.setAttribute("error", "Failed to update user role");
+            }
+        } catch (NumberFormatException e) {
+            session.setAttribute("error", "Invalid user ID or role ID");
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/AdminController?action=list");
+    }
+
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, IOException {
+        HttpSession session = request.getSession();
+        try {
+            int userId = Integer.parseInt(request.getParameter("id"));
+            
+            // Prevent self-deletion
+            if (userId == (Integer)session.getAttribute("user_id")) {
+                session.setAttribute("error", "Cannot delete your own account");
+            } else if (userDAO.deleteUser(userId)) {
+                session.setAttribute("success", "User deleted successfully");
+            } else {
+                session.setAttribute("error", "Failed to delete user");
+            }
+        } catch (NumberFormatException e) {
+            session.setAttribute("error", "Invalid user ID");
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/AdminController?action=list");
+    }
+
+    private void showUserList(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, ServletException, IOException {
+        ArrayList<UserAccount> users = userDAO.getAllUsers();
+        request.setAttribute("users", users);
+        request.getRequestDispatcher("/View/admin/Users.jsp").forward(request, response);
+    }
+
+    private void displayDashboard(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, ServletException, IOException {
+        int userCount = userDAO.getTotalUser();
+        int categoryCount = categoryDAO.getTotalCategory(); 
+        request.setAttribute("userCount", userCount);
+        request.setAttribute("categoryCount", categoryCount); 
+        request.getRequestDispatcher("/View/admin/AdminPage.jsp").forward(request, response);
+    }
+
+    private void handleError(HttpServletRequest request, HttpServletResponse response, Exception e) 
+            throws ServletException, IOException {
+        e.printStackTrace();
+        request.getSession().setAttribute("error", "An error occurred: " + e.getMessage());
+        response.sendRedirect(request.getContextPath() + "/AdminController?userConfig");
+    }
 }

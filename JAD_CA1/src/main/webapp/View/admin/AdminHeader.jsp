@@ -7,7 +7,7 @@
     <title>Clean and Clear - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/AdminHeader.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/AdminHeader.css">
 </head>
 <body>
     <%
@@ -20,7 +20,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/View/admin/AdminPage.jsp">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/AdminController">
                 <i class="fas fa-spray-can"></i>
                 Clean and Clear
             </a>
@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/userController">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/AdminController?action=list">
                             <i class="fas fa-users"></i>Users
                         </a>
                     </li>
@@ -53,3 +53,5 @@
             </div>
         </div>
     </nav>
+</body>
+</html>

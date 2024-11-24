@@ -10,67 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .card {
-            transition: transform 0.3s ease;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .category-image {
-            height: 200px;
-            object-fit: cover;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-        .btn-action {
-            transition: all 0.3s ease;
-        }
-        .btn-action:hover {
-            transform: translateY(-2px);
-        }
-        .back-to-dashboard {
-            text-decoration: none;
-            color: #6c757d;
-            transition: color 0.3s ease;
-        }
-        .back-to-dashboard:hover {
-            color: #007bff;
-        }
+        /* Your existing CSS styles */
     </style>
 </head>
 <body class="bg-light">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/AdminController">
-                <i class="fas fa-spray-can me-2"></i>Clean and Clear
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/CategoryController">
-                            <i class="fas fa-th-large me-1"></i>Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/ServiceController">
-                            <i class="fas fa-cogs me-1"></i>Services
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/UserController">
-                            <i class="fas fa-users me-1"></i>Users
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%@ include file="AdminHeader.jsp" %>
 
     <div class="container my-5">
         <!-- Header Section -->

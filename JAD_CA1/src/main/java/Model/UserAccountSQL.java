@@ -119,7 +119,63 @@ public class UserAccountSQL implements UserAccountCRUD{
 		     }
 		     return null;
 		 }
-		 
+		 @Override
+		 public boolean updateUserRole(int userId, int roleId) throws SQLException {
+			    String sql = "UPDATE user SET role_id = ? WHERE user_id = ?";
+			    boolean success = false;
+			    
+			    try (Connection conn = DatabaseConnection.getConnection();
+			         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			        
+			        pstmt.setInt(1, roleId);
+			        pstmt.setInt(2, userId);
+			        
+			        int rowsAffected = pstmt.executeUpdate();
+			        success = rowsAffected > 0;
+			        
+			    } catch (SQLException e) {
+			        throw new SQLException("Error updating user role: " + e.getMessage());
+			    }
+			    return success;
+			}
+		 @Override
+		 public boolean isValidRole(int roleId) throws SQLException {
+			    String sql = "SELECT COUNT(*) FROM roles WHERE role_id = ?";
+			    
+			    try (Connection conn = DatabaseConnection.getConnection();
+			         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			        
+			        pstmt.setInt(1, roleId);
+			        
+			        try (ResultSet rs = pstmt.executeQuery()) {
+			            if (rs.next()) {
+			                return rs.getInt(1) > 0;
+			            }
+			        }
+			    } catch (SQLException e) {
+			        throw new SQLException("Error validating role: " + e.getMessage());
+			    }
+			    return false;
+			}
+
+		 @Override
+		 public ArrayList<UserAccount> getAllUsers() throws SQLException {
+		     String sql = "SELECT * FROM user";
+		     ArrayList<UserAccount> users = new ArrayList<>();
+		     
+		     try (Connection conn = DatabaseConnection.getConnection();
+		          PreparedStatement pstmt = conn.prepareStatement(sql);
+		          ResultSet rs = pstmt.executeQuery()) {
+		         
+		         while (rs.next()) {
+		             users.add(extractUserFromResultSet(rs));
+		         }
+		     } catch (SQLException e) {
+		         throw new SQLException("Error getting all users: " + e.getMessage());
+		     }
+		     return users;
+		 }
+
 	 @Override
 	 public Integer getTotalUser() throws SQLException {
 	     String sql = "SELECT COUNT(*) as total FROM user";
@@ -304,14 +360,17 @@ public class UserAccountSQL implements UserAccountCRUD{
     
     public boolean deleteUser(int id) throws SQLException {
         String sql = "DELETE FROM user WHERE user_id = ?";
-        
+        boolean success = false;
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+            success = rowsAffected > 0;
+        }catch (SQLException e) {
+            throw new SQLException("Error deleting user: " + e.getMessage());
         }
+        return success;
     }
     
     public UserAccount getUserByUsername(String username) throws SQLException {

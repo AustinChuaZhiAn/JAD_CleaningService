@@ -76,7 +76,6 @@ public class userController extends HttpServlet {
 					AddAddressByUserDetailsId(request, response);
 					break;
 				default:
-					response.sendRedirect(request.getContextPath() + "/error.jsp");
 					break;
 				}
 			} else {
@@ -90,10 +89,52 @@ public class userController extends HttpServlet {
 
 	private void createUser(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
+		String password = request.getParameter("password");
+	    
+	    // Check password requirements
+	    if (password == null || password.length() < 8) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("error", "Password must be at least 8 characters long");
+	        response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
+	        return;
+	    }
+	    
+	    // Check for lowercase letter
+	    if (!password.matches(".*[a-z].*")) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("error", "Password must contain at least one lowercase letter");
+	        response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
+	        return;
+	    }
+	    
+	    // Check for uppercase letter
+	    if (!password.matches(".*[A-Z].*")) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("error", "Password must contain at least one uppercase letter");
+	        response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
+	        return;
+	    }
+	    
+	    // Check for number
+	    if (!password.matches(".*\\d.*")) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("error", "Password must contain at least one number");
+	        response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
+	        return;
+	    }
+	    
+	    // Check for special character
+	    if (!password.matches(".*[@$!%*?&].*")) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("error", "Password must contain at least one special character (@$!%*?&)");
+	        response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
+	        return;
+	    }
+
 
 		UserAccount newUser = new UserAccount();
 		newUser.setUsername(request.getParameter("username"));
-		newUser.setPassword(request.getParameter("password"));
+		newUser.setPassword(password);
 		newUser.setRole_id(Integer.parseInt(request.getParameter("role_id")));
 
 		UserDetails userDetails = new UserDetails();
@@ -104,13 +145,13 @@ public class userController extends HttpServlet {
 			if (!phoneNumber.matches("\\d+")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("error", "Phone number must contain only numbers");
-				response.sendRedirect(request.getContextPath() + "/Register.jsp");
+				response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
 				return;
 			}
 			if (userDAO.getUserDetailsByPhone(phoneNumber) != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("error", "Phone number already registered");
-				response.sendRedirect(request.getContextPath() + "/Register.jsp");
+				response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
 				return;
 			}
 
@@ -120,14 +161,14 @@ public class userController extends HttpServlet {
 		if (userDAO.getUserByUsername(newUser.getUsername()) != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("error", "Username already exists");
-			response.sendRedirect(request.getContextPath() + "/Register.jsp");
+			response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
 			return;
 		}
 
 		if (userDAO.getUserDetailsByEmail(userDetails.getEmail()) != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("error", "Email already registered");
-			response.sendRedirect(request.getContextPath() + "/Register.jsp");
+			response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
 			return;
 		}
 
@@ -140,15 +181,15 @@ public class userController extends HttpServlet {
 
 			switch (user.getRole_id()) {
 			case 1: // Admin Login
-				response.sendRedirect(request.getContextPath() + "/AdminPage.jsp");
+				response.sendRedirect(request.getContextPath() + "/View/admin/AdminPage.jsp");
 				break;
 			default: // Member Login
-				response.sendRedirect(request.getContextPath() + "/Home.jsp");
+				response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
 			}
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute("error", "Registration failed");
-			response.sendRedirect(request.getContextPath() + "/Register.jsp");
+			response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
 		}
 	}
 
