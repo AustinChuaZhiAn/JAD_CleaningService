@@ -15,6 +15,9 @@ import java.net.URLEncoder;
 import Model.*;
 import utils.ImgurUtil;
 import utils.ImgurUtil.ImgurResponse;
+import java.util.List;
+
+
 
 @WebServlet("/CategoryController")
 @MultipartConfig(
@@ -23,6 +26,7 @@ import utils.ImgurUtil.ImgurResponse;
     maxRequestSize = 1024 * 1024 * 15    // 15 MB
 )
 public class CategoryController extends HttpServlet {
+
     private static final long serialVersionUID = 11L;
     private CategoryDAO categoryDAO;
     private ImageDAO imageDAO;
@@ -33,6 +37,7 @@ public class CategoryController extends HttpServlet {
         imageDAO = new ImageDAOImpl();
     }
 
+
     public void init() {
         categoryDAO = new CategoryDAOImpl();
         imageDAO = new ImageDAOImpl();
@@ -41,10 +46,6 @@ public class CategoryController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "list";
-        }
-
         try {
             switch (action) {
                 case "list":
@@ -60,7 +61,9 @@ public class CategoryController extends HttpServlet {
                     deleteCategory(request, response);
                     break;
                 default:
-                    listCategories(request, response);
+                	List<Category> categories = categoryDAO.getAllCategory();
+                    request.setAttribute("Categories", categories);
+                    request.getRequestDispatcher("/View/ServiceCategories.jsp").forward(request, response);
                     break;
             }
         } catch (Exception e) {

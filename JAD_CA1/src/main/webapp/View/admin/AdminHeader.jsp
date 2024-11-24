@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/CategoryController">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/CategoryController?action=list">
                             <i class="fas fa-th-large"></i>Categories
                         </a>
                     </li>

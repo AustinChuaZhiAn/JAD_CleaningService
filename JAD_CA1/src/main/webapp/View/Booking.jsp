@@ -4,10 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Clean And Clear | Scheduling</title>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Header.css">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Booking.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clean And Clear | Scheduling</title>
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/Header.css">
 </head>
 <%
 List<Cleaner> listCleaner = (List<Cleaner>) request.getAttribute("cleanerList");
@@ -15,11 +18,11 @@ List<Address> listAddresses = (List<Address>) request.getAttribute("addressList"
 String username = (String) session.getAttribute("username");
 if (username == null) {
     String contextPath = request.getContextPath();
-    String loginPage = contextPath + "/View/Login.jsp";
+    String loginPage = contextPath + "/Login";
     response.sendRedirect(loginPage);
 }
 %>
-<body>
+<body class="bg-light">
     <%@ include file="Header.jsp"%>
 
     <%!private Date[] getWeekDates(Calendar calendar) {
@@ -41,101 +44,118 @@ if (username == null) {
     Date[] weekDates = getWeekDates(cal);
     %>
 
-    <form id="cleaningScheduleForm" action="<%=request.getContextPath()%>/Controller/BookingController.java" method="Post">
-        <div class="schedule-container">
-            <!-- Single hidden input for the selected date and time -->
-            <input type="hidden" id="selectedDateTime" name="selectedDateTime">
-            
-            <!-- Date Selection -->
-            <div class="date-selection">
-                <label for="dateSelect">Select Date:</label>
-                <select id="dateSelect" onchange="updateTimeOptions()">
-                    <option value="">Select a Date</option>
-                    <%
-                    for (Date date : weekDates) {
-                        String formattedDate = dateFormat.format(date);
-                        String dayName = dayFormat.format(date);
-                    %>
-                    <option value="<%=formattedDate%>"><%=dayName%> - <%=formattedDate%></option>
-                    <%
-                    }
-                    %>
-                </select>
-            </div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <h2 class="card-title text-center mb-4">Schedule Cleaning Service</h2>
+                        
+                        <form id="cleaningScheduleForm" action="<%=request.getContextPath()%>/BookingController" method="Post">
+                            <!-- Hidden input for selected date and time -->
+                            <input type="hidden" id="selectedDateTime" name="selectedDateTime">
+                            
+                            <!-- Date and Time Selection -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="dateSelect" class="form-label">Select Date</label>
+                                        <select id="dateSelect" class="form-select" onchange="updateTimeOptions()">
+                                            <option value="">Select a Date</option>
+                                            <% for (Date date : weekDates) {
+                                                String formattedDate = dateFormat.format(date);
+                                                String dayName = dayFormat.format(date);
+                                            %>
+                                            <option value="<%=formattedDate%>"><%=dayName%> - <%=formattedDate%></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="timeSelect" class="form-label">Select Time</label>
+                                        <select id="timeSelect" class="form-select" onchange="updateSelectedDateTime()">
+                                            <option value="">Select Time</option>
+                                            <% for (int hour = 8; hour <= 21; hour++) {
+                                                String timeLabel = (hour > 12 ? (hour - 12) : hour) + ":00" + (hour >= 12 ? "pm" : "am");
+                                                String timeValue = String.format("%02d:00", hour);
+                                            %>
+                                            <option value="<%=timeValue%>"><%=timeLabel%></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-            <!-- Time Selection -->
-            <div class="time-selection">
-                <label for="timeSelect">Select Time:</label>
-                <select id="timeSelect" onchange="updateSelectedDateTime()">
-                    <option value="">Select Time</option>
-                    <%
-                    for (int hour = 8; hour <= 21; hour++) {
-                        String timeLabel = (hour > 12 ? (hour - 12) : hour) + ":00" + (hour >= 12 ? "pm" : "am");
-                        String timeValue = String.format("%02d:00", hour);
-                    %>
-                    <option value="<%=timeValue%>"><%=timeLabel%></option>
-                    <%
-                    }
-                    %>
-                </select>
-            </div>
+                            <!-- Selected DateTime Display -->
+                            <div class="alert alert-info mb-4" id="selectedDateTimeDisplay">
+                                Selected Date and Time: <span id="dateTimeOutput" class="fw-bold">None selected</span>
+                            </div>
 
-            <!-- Display selected date and time -->
-            <div id="selectedDateTimeDisplay" class="selected-datetime">
-                Selected Date and Time: <span id="dateTimeOutput">None selected</span>
+                            <!-- Address Selection -->
+                            <div class="mb-4">
+                                <label for="addressDropdown" class="form-label">Address</label>
+                                <div class="input-group">
+                                    <select id="addressDropdown" name="address" class="form-select" required>
+                                        <option value="">Select an Address</option>
+                                        <% if (listAddresses != null && !listAddresses.isEmpty()) {
+                                            for (Address address : listAddresses) { %>
+                                        <option value="<%=address.getAddress()%>">
+                                            <%=address.getBlock_number()%>,
+                                            <%=address.getStreet_name()%>,
+                                            <%=address.getUnit_number()%>
+                                            <%=address.getPostal_code()%>
+                                        </option>
+                                        <% }
+                                        } else { %>
+                                        <option value="" disabled>No addresses available</option>
+                                        <% } %>
+                                    </select>
+                                    <a href="<%=request.getContextPath()%>/Profile" class="btn btn-primary" title="Add New Address">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Cleaner Selection -->
+                            <div class="mb-4">
+                                <label for="cleanerDropdown" class="form-label">Cleaner of Choice</label>
+                                <select id="cleanerDropdown" name="cleaner" class="form-select" required>
+                                    <option value="">Select a Cleaner</option>
+                                    <% if (listCleaner != null && !listCleaner.isEmpty()) {
+                                        for (Cleaner cleaner : listCleaner) { %>
+                                    <option value="<%=cleaner.getCleaner_id()%>">
+                                        <%=cleaner.getCleaner_name()%>
+                                    </option>
+                                    <% }
+                                    } else { %>
+                                    <option value="" disabled>No Cleaner available</option>
+                                    <% } %>
+                                </select>
+                            </div>
+
+                            <!-- Special Requests -->
+                            <div class="mb-4">
+                                <label for="specialRequests" class="form-label">Special Requests</label>
+                                <textarea id="specialRequests" name="specialRequests" class="form-control" 
+                                    rows="4" placeholder="Type your special requests here..."></textarea>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">Next</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Rest of your form remains the same -->
-        <div>
-            <label for="addressDropdown">Address</label>
-            <div class="dropdown-container">
-                <select id="addressDropdown" name="address" required>
-                    <option value="">Select an Address</option>
-                    <% if (listAddresses != null && !listAddresses.isEmpty()) {
-                        for (Address address : listAddresses) { %>
-                    <option value="<%=address.getAddress()%>">
-                        <%=address.getBlock_number()%>,
-                        <%=address.getStreet_name()%>,
-                        <%=address.getUnit_number()%>
-                        <%=address.getPostal_code()%>
-                    </option>
-                    <% }
-                    } else { %>
-                    <option value="" disabled>No addresses available</option>
-                    <% } %>
-                </select>
-                <a href="<%=request.getContextPath()%>/View/Profile.jsp" class="add-address-btn" title="Add New Address">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </div>
-        </div>
-
-        <div>
-            <label for="cleaner">Cleaner of Choice</label>
-            <div class="dropdown-container">
-                <select id="cleanerDropdown" name="cleaner" required>
-                    <option value="">Select a Cleaner</option>
-                    <% if (listCleaner != null && !listCleaner.isEmpty()) {
-                        for (Cleaner cleaner : listCleaner) { %>
-                    <option value="<%=cleaner.getCleaner_id()%>">
-                        <%=cleaner.getCleaner_name()%>
-                    </option>
-                    <% }
-                    } else { %>
-                    <option value="" disabled>No Cleaner available</option>
-                    <% } %>
-                </select>
-            </div>
-        </div>
-
-        <label for="specialRequests">Please enter any special requests:</label><br>
-        <textarea id="specialRequests" name="specialRequests" rows="4" cols="50"
-            placeholder="Type your special requests here..."></textarea>
-        <br><br>
-        <input type="submit" value="nextBtn">
-    </form>
-
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
     function updateSelectedDateTime() {
         const dateSelect = document.getElementById('dateSelect');
@@ -144,7 +164,6 @@ if (username == null) {
         const dateTimeOutput = document.getElementById('dateTimeOutput');
 
         if (dateSelect.value && timeSelect.value) {
-            // Combine date and time into a single value
             const combinedDateTime = dateSelect.value + ' ' + timeSelect.value;
             selectedDateTime.value = combinedDateTime;
             dateTimeOutput.textContent = combinedDateTime;
@@ -155,7 +174,6 @@ if (username == null) {
     }
 
     function updateTimeOptions() {
-        // Reset time selection when date changes
         const timeSelect = document.getElementById('timeSelect');
         timeSelect.value = '';
         updateSelectedDateTime();

@@ -11,6 +11,7 @@ import utils.DatabaseConnection;
 
 public class UserAccountSQL implements UserAccountCRUD{
 	
+
 	 @Override
 	    public UserAccount verifyUser(String username, String password) throws SQLException {
 	        try (Connection conn = DatabaseConnection.getConnection()) {
@@ -36,6 +37,70 @@ public class UserAccountSQL implements UserAccountCRUD{
 	        }
 	        return null;
 	    }
+	 
+	 public UserDetails getUserDetailsByUserId(int id) throws SQLException {
+		 String sql = "SELECT * FROM userdetails WHERE user_id = ?";
+
+		 try (Connection conn = DatabaseConnection.getConnection();
+		 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+		 pstmt.setInt(1, id);
+		 try (ResultSet rs = pstmt.executeQuery()) {
+		 UserDetails details = new UserDetails();
+		 if (rs.next()) {
+		 details.setUser_details_id(rs.getInt("user_details_id"));
+		 details.setUser_id(rs.getInt("user_id"));
+		 details.setEmail(rs.getString("email"));
+		 details.setPhone_number(rs.getString("phone_number"));
+		 details.setCreated_at(rs.getTimestamp("created_at"));
+		 details.setUpdated_at(rs.getTimestamp("updated_at"));
+		 return details;
+		 }
+		 }
+		 return null;
+		 }
+		 }
+
+
+		 public void updateUsernameByUserId(String username, int id) throws SQLException {
+		 String sql = "UPDATE user SET username = ?,"
+		 + "updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
+
+		 try (Connection conn = DatabaseConnection.getConnection();
+		 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+		 pstmt.setString(1, username);
+		 pstmt.setInt(2, id);
+
+		         int rowsAffected = pstmt.executeUpdate();
+		         
+		         //Check if update was successful
+		         if (rowsAffected == 0) {
+		             throw new SQLException("Update failed, no rows affected.");
+		         }
+		 }
+		 }
+
+		 public void updateUserDetailsByUserId(String email, String phone, int id) throws SQLException {
+		 String sql = "UPDATE userdetails SET email = ?,"
+		 + " phone_number = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
+
+		 try (Connection conn = DatabaseConnection.getConnection();
+		 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+		 pstmt.setString(1, email);
+		 pstmt.setString(2, phone);
+		 pstmt.setInt(3, id);
+
+		         int rowsAffected = pstmt.executeUpdate();
+		         
+		         //Check if update was successful
+		         if (rowsAffected == 0) {
+		             throw new SQLException("Update failed, no rows affected.");
+		         }
+		 }
+		 }
+		
 	 @Override
 	 public Integer getTotalUser() throws SQLException {
 	     String sql = "SELECT COUNT(*) as total FROM user";

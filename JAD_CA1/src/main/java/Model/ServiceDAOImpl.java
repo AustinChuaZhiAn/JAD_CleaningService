@@ -90,6 +90,25 @@ public class ServiceDAOImpl implements ServiceDAO {
             return stmt.executeUpdate() > 0;
         }
     }
+    @Override
+    public int getServiceIdByDetails(int category_id, int service_type_id, int frequency_id) throws SQLException {
+        String sql = "SELECT service_id FROM services WHERE category_id = ? AND service_type_id = ? AND frequency_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); 
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setInt(1, category_id);
+                pstmt.setInt(2, service_type_id);
+                pstmt.setInt(3, frequency_id);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt("service_id");
+                    }
+                }
+            }
+            return -1;
+    }
+    
     
     @Override
     public boolean updateService(Service service) throws SQLException {

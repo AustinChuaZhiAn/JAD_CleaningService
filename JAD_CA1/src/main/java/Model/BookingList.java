@@ -18,7 +18,7 @@ public class BookingList implements BookingCRUD {
 	    // SQL query for inserting a new booking into the 'booking' table
 	    String sql = """
 	        INSERT INTO booking 
-	        (user_id, address_id, time, date, cleaner_id, service_id, special_request, status_id) 
+	        (user_id, address, time, date, cleaner_id, service_id, special_request, status_id) 
 	        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 	    """;
 	    
@@ -74,7 +74,7 @@ public class BookingList implements BookingCRUD {
 	            	Booking booking = new Booking(
 	                        rs.getInt("booking_id"),                   
 	                        rs.getInt("user_id"),
-	                        rs.getInt("address_id"),
+	                        rs.getInt("address"),
 	                        rs.getTime("time").toLocalTime(),          
 	                        rs.getDate("date").toLocalDate(),          
 	                        rs.getInt("cleaner_id"),                   
