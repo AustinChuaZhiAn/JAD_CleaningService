@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserAccountCRUD {
 	//Authentication acc
 	UserAccount verifyUser(String username,String password) throws SQLException;
-	
+	Integer getTotalUser() throws SQLException;
 	//CRUD fOr user
     boolean createUser(UserAccount user, UserDetails userDetails) throws SQLException;
     List<UserAccount> getAllUser() throws SQLException;
@@ -16,8 +16,4 @@ public interface UserAccountCRUD {
 	UserAccount getUserByUsername(String username) throws SQLException;
 	UserDetails getUserDetailsByEmail(String email) throws SQLException;
 	UserDetails getUserDetailsByPhone(String phone) throws SQLException;
-	
-	UserDetails getUserDetailsByUserId(int id) throws SQLException;
-	void updateUsernameByUserId(String username, int id) throws SQLException;
-	void updateUserDetailsByUserId(String email, String phone, int id) throws SQLException;
 }

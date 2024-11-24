@@ -62,7 +62,7 @@
                     <p>Log in to get access to your cleaning service resources.</p>
                 </div>
 
-<form action="${pageContext.request.contextPath}/userController" method="POST" class="login-form">
+<form action="${pageContext.request.contextPath}/AdminController" method="POST" class="login-form">
     <input type="hidden" name="action" value="verify">
     
 <% if (session.getAttribute("error") != null) { %>

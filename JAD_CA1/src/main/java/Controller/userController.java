@@ -8,53 +8,28 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import Model.*;
+import Model.UserAccount;
+import Model.UserAccountCRUD;
+import Model.UserAccountSQL;
+import Model.UserDetails;
 
 @WebServlet("/userController")
 public class userController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserAccountCRUD userDAO;
-    private AddressCRUD addressList;
-    private CleanerRead cleanerList;
-    private BookingCRUD bookingList;
        
     public userController() {
         super();
         userDAO = new UserAccountSQL();
-        addressList =  new AddressList();
-        cleanerList = new CleanerList();
-        bookingList = new BookingList();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		 String action = request.getParameter("action");
-	        
-	        try {
-	            if (action != null) {
-	                switch(action) {
-	                    case "AddAddress":
-	                    	getAddressType(request, response);
-	                    	break;
-	                    default:
-	                    	getProfileByUserId(request, response);
-	                        break;
-	                }
-	            } else {
-	                response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
-	            }
-        	
-        } catch(SQLException ex) {
-        	throw new ServletException(ex);
-        }
+        // ... existing doGet code ...
     }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String action = request.getParameter("action");
         
@@ -68,12 +43,7 @@ public class userController extends HttpServlet {
                     case "create":
                         createUser(request, response);
                         break;
-                    case "UpdateProfile":
-                    	UpdateProfileByUserDetailsId(request, response);
-                    	break;
-                    case "AddAddress":
-                    	AddAddressByUserDetailsId(request, response);
-                    	break;
+                        
                     default:
                         response.sendRedirect(request.getContextPath() + "/View/error.jsp");
                         break;
@@ -180,145 +150,4 @@ public class userController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/View/Register.jsp");
         }
     }
-    
-    private void getProfileByUserId(HttpServletRequest request, HttpServletResponse response) 
-    		throws SQLException, ServletException, IOException {
-    	
-		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("username");
-		if (username == null) {
-		    String contextPath = request.getContextPath();
-		    String loginPage = contextPath + "/View/Login.jsp";
-		    response.sendRedirect(loginPage);
-		}
-    	
-    	int user_id = (int) session.getAttribute("user_id");
-    	UserDetails profileDetails = userDAO.getUserDetailsByUserId(user_id);
-    	UserAccount userDetails = userDAO.getUserByUsername(username);
-		List<Address> listAddress = addressList.getAddressesByUserId(user_id);
-		List<Booking> listBooking = bookingList.getBookingByUserId(user_id);
-		List<Cleaner> listCleaner = new ArrayList<>();
-		for(Booking booking : listBooking) {
-			listCleaner.add(cleanerList.getCleanerByBookingId(booking.getBooking_id()));
-		}
-		
-		request.setAttribute("bookingList", listBooking);
-		request.setAttribute("cleanerList", listCleaner);
-		request.setAttribute("addressList", listAddress);
-    	request.setAttribute("user", userDetails);
-    	request.setAttribute("userdetails", profileDetails);
-    	request.getRequestDispatcher(request.getContextPath() + "/View/Profile.jsp").forward(request, response);
-    }
-    
-    private void getAddressType(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
-		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("username");
-		if (username == null) {
-		    String contextPath = request.getContextPath();
-		    String loginPage = contextPath + "/View/Login.jsp";
-		    response.sendRedirect(loginPage);
-		}
-    	
-    	List<AddressType> listAddressType = addressList.getAllAddressType();
-    	request.setAttribute("addressType", listAddressType);
-
-    	request.getRequestDispatcher(request.getContextPath() + "/View/CreateAddress.jsp").forward(request, response);
-	}
-    
-    private void UpdateProfileByUserDetailsId(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
-        HttpSession session = request.getSession();
-        Integer user_id = (Integer) session.getAttribute("user_id");
-
-        if (user_id == null || user_id == 0) {
-            response.sendRedirect(request.getContextPath() + "/View/Login.jsp");
-            return;
-        }
-
-        String username = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-
-        if (username == null || email == null || phone == null || username.isEmpty() || email.isEmpty() || phone.isEmpty()) {
-            request.setAttribute("errorMessage", "All fields are required.");
-            request.getRequestDispatcher("/View/Profile.jsp").forward(request, response);
-            return;
-        }
-
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        if (!email.matches(emailRegex)) {
-            request.setAttribute("errorMessage", "Invalid email format.");
-            request.getRequestDispatcher("/View/Profile.jsp").forward(request, response);
-            return;
-        }
-
-        String phoneRegex = "^\\+?\\d{10,15}$";
-        if (!phone.matches(phoneRegex)) {
-            request.setAttribute("errorMessage", "Phone number must be between 10 and 15 digits.");
-            request.getRequestDispatcher("/View/Profile.jsp").forward(request, response);
-            return;
-        }
-
-        userDAO.updateUsernameByUserId(username, user_id);
-        userDAO.updateUserDetailsByUserId(email, phone, user_id);
-
-        response.sendRedirect(request.getContextPath() + "/View/Profile.jsp");
-    }
-    
-	private void AddAddressByUserDetailsId(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, ServletException, IOException {
-        
-    	    String address_type_idStr = request.getParameter("address_type_id");
-    	    String postal_codeStr = request.getParameter("postal_code");
-    	    String block_number = request.getParameter("block_number");
-    	    String street_name = request.getParameter("street_name");
-    	    String unit_number = request.getParameter("unit_number");
-    	    String building_name = request.getParameter("building_name");
-
-    	    if (address_type_idStr == null || postal_codeStr == null || block_number == null || street_name == null || unit_number == null || building_name == null ||
-    	        address_type_idStr.isEmpty() || postal_codeStr.isEmpty() || block_number.isEmpty() || street_name.isEmpty() || unit_number.isEmpty() || building_name.isEmpty()) {
-    	        
-    	        request.setAttribute("errorMessage", "All fields are required.");
-    	        request.getRequestDispatcher("/View/CreateAddress.jsp").forward(request, response);
-    	        return;
-    	    }
-
-    	    int address_type_id = -1;
-    	    int postal_code = -1;
-
-    	    try {
-    	        address_type_id = Integer.parseInt(address_type_idStr);
-
-    	        if (postal_codeStr.length() != 6 || !postal_codeStr.matches("\\d{6}")) {
-    	            request.setAttribute("errorMessage", "Postal Code must be exactly 6 digits.");
-    	            request.getRequestDispatcher("/View/CreateAddress.jsp").forward(request, response);
-    	            return;
-    	        }
-
-    	        postal_code = Integer.parseInt(postal_codeStr);
-    	    } catch (NumberFormatException e) {
-    	        request.setAttribute("errorMessage", "Address Type ID and Postal Code must be numeric.");
-    	        request.getRequestDispatcher("/View/CreateAddress.jsp").forward(request, response);
-    	        return;
-    	    }
-
-    	    HttpSession session = request.getSession();
-    	    Integer user_id = (Integer) session.getAttribute("user_id");
-
-    	    if (user_id == null) {
-    	        response.sendRedirect(request.getContextPath() + "/View/Login.jsp");
-    	        return;
-    	    }
-
-    	    UserDetails userDetails = userDAO.getUserDetailsByUserId(user_id);
-    	    int user_details_id = userDetails.getUser_details_id();
-
-    	    int addAddress = addressList.addAddress(user_details_id, postal_code, block_number, street_name, unit_number, building_name, address_type_id);
-
-    	    if (addAddress == -1) {
-    	        request.setAttribute("errorMessage", "Address addition failed.");
-    	        request.getRequestDispatcher("/View/CreateAddress.jsp").forward(request, response);
-    	    } else {
-    	        response.sendRedirect(request.getContextPath() + "/View/Profile.jsp");
-    	    }
-    	}
 }

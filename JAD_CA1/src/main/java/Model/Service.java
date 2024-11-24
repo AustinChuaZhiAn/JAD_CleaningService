@@ -9,10 +9,9 @@ public class Service {
     
     // Display fields for frontend
     private String category_name;
-    private String category_img_url;
-    private String description;
     private String service_type;
     private String frequency;
+    private String status;  
     
 
     public Service() {}
@@ -26,17 +25,16 @@ public class Service {
     
     // Full constructor with display fields
     public Service(int service_id, int category_id, int service_type_id, int frequency_id, 
-                  String price, String category_name, String service_type, String frequency, String category_img_url, String description) {
+                  String price, String category_name, String service_type, String frequency, String status) {
         this.service_id = service_id;
         this.category_id = category_id;
         this.service_type_id = service_type_id;
         this.frequency_id = frequency_id;
         this.price = price;
         this.category_name = category_name;
-        this.category_img_url = category_img_url;
-        this.description = description;
         this.service_type = service_type;
         this.frequency = frequency;
+        this.status = status;
     }
 
 	public int getService_id() {
@@ -103,20 +101,11 @@ public class Service {
 		this.frequency = frequency;
 	}
 
-	public String getCategory_img_url() {
-		return category_img_url;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setCategory_img_url(String category_img_url) {
-		this.category_img_url = category_img_url;
+	public void setStatus(String status) {
+		this.status = status;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 }
