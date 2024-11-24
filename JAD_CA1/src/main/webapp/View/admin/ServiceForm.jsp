@@ -3,7 +3,6 @@
 <%@ page import="Model.Category" %>
 <%@ page import="Model.ServiceType" %>
 <%@ page import="Model.Frequency" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
@@ -44,6 +43,7 @@
         List<Category> categories = (List<Category>) request.getAttribute("categories");
         List<ServiceType> serviceTypes = (List<ServiceType>) request.getAttribute("serviceTypes");
         List<Frequency> frequencies = (List<Frequency>) request.getAttribute("frequencies");
+        
         boolean isEdit = service != null && service.getService_id() != 0;
         String formAction = isEdit ? "edit" : "create";
         String formTitle = isEdit ? "Edit Service" : "Create New Service";
@@ -69,14 +69,20 @@
                     
                     <div class="card-body">
                         <!-- Error Message -->
-                        <% if (request.getParameter("error") != null) { %>
+                        <% if (request.getAttribute("error") != null) { %>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <i class="fas fa-exclamation-circle me-2"></i>
-                                <%= request.getParameter("error") %>
+                                <%= request.getAttribute("error") %>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         <% } %>
                         
+                        <% if (categories == null || serviceTypes == null || frequencies == null) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Failed to load form data. Please try again.
+                            </div>
+                        <% } else { %>
                         <form action="${pageContext.request.contextPath}/ServiceController" method="POST">
                             <input type="hidden" name="action" value="<%= formAction %>">
                             <% if (isEdit) { %>
@@ -146,6 +152,7 @@
                                 </button>
                             </div>
                         </form>
+                        <% } %>
                     </div>
                 </div>
             </div>
