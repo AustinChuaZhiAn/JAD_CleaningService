@@ -112,7 +112,7 @@ if (username == null) {
                                         <option value="" disabled>No addresses available</option>
                                         <% } %>
                                     </select>
-                                    <a href="<%=request.getContextPath()%>/Profile" class="btn btn-primary" title="Add New Address">
+                                    <a href="<%=request.getContextPath()%>/userController" class="btn btn-primary" title="Add New Address">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </div>

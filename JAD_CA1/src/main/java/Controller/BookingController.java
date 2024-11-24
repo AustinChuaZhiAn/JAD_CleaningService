@@ -105,7 +105,7 @@ public class BookingController extends HttpServlet {
 	    session.removeAttribute("frequency_id");
 	    
 		session.setAttribute("booking_id", booking_id);
-		response.sendRedirect(request.getContextPath() + "/receipt"); // ADD YOUR PAGE URL HERE
+		response.sendRedirect(request.getContextPath() + "/userController");
 	}
 
 	private void listBooking(HttpServletRequest request, HttpServletResponse response)

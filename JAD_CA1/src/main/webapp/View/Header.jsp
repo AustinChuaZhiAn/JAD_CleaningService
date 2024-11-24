@@ -8,7 +8,7 @@
 	</div>
 	<nav class="nav-bar">
 		<a
-			href="<%=request.getContextPath()%>/View/ServiceCategories.jsp"
+			href="<%=request.getContextPath()%>/CategoryController?action=view"
 			class="nav-button">OUR SERVICES</a>
 		<%
 		if (session.getAttribute("user_id") != null) {

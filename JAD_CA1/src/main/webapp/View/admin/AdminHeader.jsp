@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/UserController">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/userController">
                             <i class="fas fa-users"></i>Users
                         </a>
                     </li>

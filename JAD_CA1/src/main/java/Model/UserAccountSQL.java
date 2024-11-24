@@ -101,6 +101,25 @@ public class UserAccountSQL implements UserAccountCRUD{
 		 }
 		 }
 		
+		 @Override
+		 public UserAccount getUserById(int id) throws SQLException {
+		     String sql = "SELECT * FROM user WHERE user_id = ?";
+		     
+		     try (Connection conn = DatabaseConnection.getConnection();
+		          PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		         
+		         pstmt.setInt(1, id);
+		         try (ResultSet rs = pstmt.executeQuery()) {
+		             if (rs.next()) {
+		                 return extractUserFromResultSet(rs);
+		             }
+		         }
+		     } catch (SQLException e) {
+		         throw new SQLException("Error getting user by ID: " + e.getMessage());
+		     }
+		     return null;
+		 }
+		 
 	 @Override
 	 public Integer getTotalUser() throws SQLException {
 	     String sql = "SELECT COUNT(*) as total FROM user";

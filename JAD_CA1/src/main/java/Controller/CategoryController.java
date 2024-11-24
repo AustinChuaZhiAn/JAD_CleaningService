@@ -47,7 +47,13 @@ public class CategoryController extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         try {
+
             switch (action) {
+            case "view":
+            	List<Category> categories = categoryDAO.getAllCategory();
+                request.setAttribute("Categories", categories);
+                request.getRequestDispatcher("/View/ServiceCategories.jsp").forward(request, response);
+                break;
                 case "list":
                     listCategories(request, response);
                     break;
@@ -61,9 +67,7 @@ public class CategoryController extends HttpServlet {
                     deleteCategory(request, response);
                     break;
                 default:
-                	List<Category> categories = categoryDAO.getAllCategory();
-                    request.setAttribute("Categories", categories);
-                    request.getRequestDispatcher("/View/ServiceCategories.jsp").forward(request, response);
+                    listCategories(request, response);
                     break;
             }
         } catch (Exception e) {

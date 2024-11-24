@@ -32,7 +32,7 @@
 					environment you’ll love coming back to! 👉 Let us do the dirty
 					work, so you don’t have to!</p>
 
-				<a href="<%=request.getContextPath()%>/CategoryController"
+				<a href="<%=request.getContextPath()%>/CategoryController?action=view"
 					class="book-button">Book Now!</a>
 
 			</div>

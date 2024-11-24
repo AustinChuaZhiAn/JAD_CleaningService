@@ -64,9 +64,6 @@ public class userController extends HttpServlet {
 		try {
 			if (action != null) {
 				switch (action) {
-				case "verify":
-					verifyUser(request, response);
-					break;
 
 				case "create":
 					createUser(request, response);
@@ -90,36 +87,6 @@ public class userController extends HttpServlet {
 		}
 	}
 
-	private void verifyUser(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, ServletException, IOException {
-
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-
-		UserAccount user = userDAO.verifyUser(username, password);
-
-		if (user != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("user_id", user.getUser_id());
-			session.setAttribute("username", user.getUsername());
-			session.setAttribute("role_id", user.getRole_id());
-
-			switch (user.getRole_id()) {
-			case 1: // Admin Login
-				response.sendRedirect(request.getContextPath() + "/AdminPage.jsp");
-				break;
-			case 2: // Member Login
-				response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
-				break;
-			default:
-				response.sendRedirect(request.getContextPath() + "/Home.jsp");
-			}
-		} else {
-			HttpSession session = request.getSession();
-			session.setAttribute("error", "Invalid username or password");
-			response.sendRedirect(request.getContextPath() + "/Login.jsp");
-		}
-	}
 
 	private void createUser(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
