@@ -74,7 +74,7 @@ body {
 
 .icon img {
     margin-left: 40px;
-    object-fit: contain; /* This ensures the image maintains its aspect ratio */
+    object-fit: contain;
 }
 
 /* Make it responsive */

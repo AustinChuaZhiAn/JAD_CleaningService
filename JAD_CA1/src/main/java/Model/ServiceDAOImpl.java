@@ -150,7 +150,7 @@ public class ServiceDAOImpl implements ServiceDAO {
             rs.getString("category_name"),
             rs.getString("service_type"),
             rs.getString("frequency"),
-            "active" // Default status or you can add a status column in database
+            "active" 
         );
     }
 }

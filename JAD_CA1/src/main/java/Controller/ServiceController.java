@@ -103,8 +103,8 @@ public class ServiceController extends HttpServlet {
             ArrayList<Category> categories = categoryDAO.getAllCategory();
             List<ServiceType> serviceTypes = serviceTypeRead.getAllServiceType();
             List<Frequency> frequencies = frequencyRead.getAllFrequency();
-            
-            Service emptyService = new Service();  // Create empty service for the form
+            // Create empty service for the form
+            Service emptyService = new Service(); 
             
             request.setAttribute("service", emptyService);
             request.setAttribute("categories", categories);

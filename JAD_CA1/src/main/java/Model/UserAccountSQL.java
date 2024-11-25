@@ -7,8 +7,6 @@ import java.util.List;
 import utils.DatabaseConnection;
 
 
-
-
 public class UserAccountSQL implements UserAccountCRUD{
 	
 

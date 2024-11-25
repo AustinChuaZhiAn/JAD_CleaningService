@@ -22,12 +22,12 @@ body {
   color: var(--dark-color);
   min-height: 100vh;
   position: relative;
-  padding-bottom: 80px; /* Adjust this value based on the footer height */
+  padding-bottom: 80px; 
 }
 
 .main-content {
   flex: 1;
-  margin-left: 280px; /* Adjust this value based on the sidebar width */
+  margin-left: 280px; 
   padding: 30px;
 }
 

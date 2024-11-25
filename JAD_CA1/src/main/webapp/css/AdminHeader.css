@@ -118,13 +118,11 @@ body {
     transform: translateY(-2px);
 }
 
-/* Add smooth transition for all interactive states */
 .nav-link,
 .logout-btn {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .nav-link.active::after {
         left: 0;
