@@ -8,34 +8,21 @@
 	</div>
 	<nav class="nav-bar">
 		<a
-			href="<%=request.getContextPath()%>/View/ServiceCategories.jsp"
+			href="<%=request.getContextPath()%>/CategoryController?action=view"
 			class="nav-button">OUR SERVICES</a>
 		<%
 		if (session.getAttribute("user_id") != null) {
 		%>
 		<a
-			href="<%=request.getContextPath()%>/View/Profile.jsp"
+			href="<%=request.getContextPath()%>/userController"
 			class="nav-button">Your Bookings</a>
 		<%
 		} else {
-		    String currentURL = request.getRequestURL().toString();
-		    if (currentURL.endsWith("Login.jsp")) {
-		    	%>
-				<a
-				href="<%=request.getContextPath()%>/View/Home.jsp"
-				class="nav-button">Home</a>
-				<% 
-		    	
-		    	
-		    	
-		    	
-		    } else {
-		    	%>
-				<a
-				href="<%=request.getContextPath()%>/View/Login.jsp"
-				class="nav-button">Login</a>
-				<% 
-		    }
+		%>
+		<a
+			href="<%=request.getContextPath()%>/View/Login.jsp"
+			class="nav-button">Login</a>
+		<%
 		}
 		%>
 	</nav>
