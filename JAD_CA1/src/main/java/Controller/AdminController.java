@@ -47,6 +47,9 @@ public class AdminController extends HttpServlet {
                 case "list":
                     showUserList(request, response);
                     break;
+                case "deleteUser":
+                	deleteUser(request,response);
+                	break;
                 default:
                     displayDashboard(request, response);
                     break;
@@ -142,7 +145,8 @@ public class AdminController extends HttpServlet {
         HttpSession session = request.getSession();
         try {
             int userId = Integer.parseInt(request.getParameter("id"));
-            
+            System.out.println("Attempting to delete user ID: " + userId);
+            System.out.println("Current user ID: " + session.getAttribute("user_id")); 
             // Prevent self-deletion
             if (userId == (Integer)session.getAttribute("user_id")) {
                 session.setAttribute("error", "Cannot delete your own account");

@@ -362,10 +362,14 @@ public class UserAccountSQL implements UserAccountCRUD{
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
+            System.out.println("Executing delete query for user ID: " + id); // Add this line
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected); // Add this line
             success = rowsAffected > 0;
-        }catch (SQLException e) {
+            
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage()); // Add this line
             throw new SQLException("Error deleting user: " + e.getMessage());
         }
         return success;
