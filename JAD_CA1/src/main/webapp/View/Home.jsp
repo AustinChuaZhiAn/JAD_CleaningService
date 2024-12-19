@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/Footer.css">
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/Home.css">
+	href="<%=request.getContextPath()%>/css/Home.css?v=2.0">
 </head>
 <body>
 	<%@ include file="Header.jsp"%>
@@ -37,7 +37,7 @@
 
 			</div>
 			<div class="icon">
-				<img src="<%=request.getContextPath()%>/img/img_url"
+				<img src="<%=request.getContextPath()%>/images/cleaner_icon.png"
 					alt="Cleaning Icon" width="150" height="150">
 			</div>
 		</div>

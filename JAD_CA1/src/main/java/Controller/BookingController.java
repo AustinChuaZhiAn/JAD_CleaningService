@@ -111,19 +111,14 @@ public class BookingController extends HttpServlet {
 	private void listBooking(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
 		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("username");
-		if (username == null || username.isEmpty()) {
-		    System.out.println("Redirecting to login page");
-		    String contextPath = request.getContextPath();
-		    String loginPage = contextPath + "/View/Login.jsp";
-		    response.sendRedirect(loginPage);
-		    return;
-		} else {
-		    System.out.println("Username is present: " + username);
-		}
-		
-		String frequency_idStr = request.getParameter("frequency_id");
-		int frequency_id = Integer.parseInt(frequency_idStr);
+		Integer prevFrequency_id = (Integer) session.getAttribute("frequency_id");
+		System.out.println(prevFrequency_id);
+		if(prevFrequency_id == null) {
+			String frequency_idStr = request.getParameter("frequency_id");
+			int frequency_id = Integer.parseInt(frequency_idStr);
+			System.out.println(frequency_id);
+			session.setAttribute("frequency_id", frequency_id);
+		};
 		
 		Integer user_id = (Integer) session.getAttribute("user_id");
 		if (user_id == null || user_id == 0) {
@@ -136,8 +131,6 @@ public class BookingController extends HttpServlet {
 		    System.out.println("user_id is present");
 		}
 		
-		session.setAttribute("frequency_id", frequency_id);
-
 		List<Address> listAddress = addressList.getAddressesByUserId(user_id);
 		List<Cleaner> listCleaner = cleanerList.getAllCleaner();
 		request.setAttribute("cleanerList", listCleaner);

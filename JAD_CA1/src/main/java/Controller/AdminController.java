@@ -97,6 +97,7 @@ public class AdminController extends HttpServlet {
         
         if (user != null) {
             HttpSession session = request.getSession();
+            Integer visitedOptions = (Integer) session.getAttribute("frequency_id");
             session.setAttribute("user_id", user.getUser_id());
             session.setAttribute("username", user.getUsername());
             session.setAttribute("role_id", user.getRole_id());
@@ -106,7 +107,12 @@ public class AdminController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/AdminController");
                     break;
                 case 2: // Member Login
-                    response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
+                	if(visitedOptions == null) {
+                        response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
+                	} else {
+                        response.sendRedirect(request.getContextPath() + "/BookingController");	
+                	}
+                	
                     break;
                 default:
                     response.sendRedirect(request.getContextPath() + "/View/Home.jsp");
