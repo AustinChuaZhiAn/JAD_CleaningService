@@ -51,4 +51,30 @@ public class CleanerList implements CleanerRead {
 	        }
 	    }
 	}
+	
+	@Override
+	public Cleaner getCleanerByCleanerId(int id) throws SQLException {
+	    String sql = """
+	        SELECT * FROM cleaner
+	        WHERE cleaner_id = ?;
+	        """;
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setInt(1, id);
+	        ResultSet rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            Cleaner cleaner = new Cleaner(
+	                rs.getInt("cleaner_id"),          
+	                rs.getString("cleaner_name"),     
+	                rs.getInt("contact")      
+	            );
+	            return cleaner;
+	        } else {
+	            return null;
+	        }
+	    }
+	}
 }

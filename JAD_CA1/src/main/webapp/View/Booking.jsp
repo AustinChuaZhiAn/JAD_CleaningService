@@ -51,7 +51,7 @@ if (username == null) {
                     <div class="card-body p-4">
                         <h2 class="card-title text-center mb-4">Schedule Cleaning Service</h2>
                         
-                        <form id="cleaningScheduleForm" action="<%=request.getContextPath()%>/BookingController" method="Post">
+                        <form id="cleaningScheduleForm" action="<%=request.getContextPath()%>/BookingController?action=AddToCart" method="Post">
                             <!-- Hidden input for selected date and time -->
                             <input type="hidden" id="selectedDateTime" name="selectedDateTime">
                             

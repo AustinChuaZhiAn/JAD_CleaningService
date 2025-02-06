@@ -210,13 +210,13 @@ public class userController extends HttpServlet {
 		UserAccount userDetails = userDAO.getUserByUsername(username);
 		List<Address> listAddress = addressList.getAddressesByUserId(user_id);
 		List<Booking> listBooking = bookingList.getBookingByUserId(user_id);
-		List<Cleaner> listCleaner = new ArrayList<>();
-		for (Booking booking : listBooking) {
-			listCleaner.add(cleanerList.getCleanerByBookingId(booking.getBooking_id()));
-		}
+//		List<Cleaner> listCleaner = new ArrayList<>();
+//		for (Booking booking : listBooking) {
+//			listCleaner.add(cleanerList.getCleanerByBookingId(booking.getBooking_id()));
+//		}
 
 		request.setAttribute("bookingList", listBooking);
-		request.setAttribute("cleanerList", listCleaner);
+//		request.setAttribute("cleanerList", listCleaner);
 		request.setAttribute("addressList", listAddress);
 		request.setAttribute("user", userDetails);
 		request.setAttribute("userdetails", profileDetails);

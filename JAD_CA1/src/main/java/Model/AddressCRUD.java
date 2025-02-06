@@ -10,6 +10,7 @@ public interface AddressCRUD {
 			, String unit_number, String building_name, int address_type_id) throws SQLException;
     
     // Read
+    Address getAddressByAddressId(int id) throws SQLException;
     List<Address> getAddressesByUserId(int id) throws SQLException;
     List<Address> getAllAddress() throws SQLException;
     List<AddressType> getAllAddressType() throws SQLException;

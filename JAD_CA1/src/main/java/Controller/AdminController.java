@@ -4,6 +4,9 @@ import Model.CategoryDAOImpl;
 import Model.UserAccount;
 import Model.UserDetails;
 import Model.UserAccountSQL;
+import Model.AddressList;
+import Model.Address;
+import Model.AddressType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,16 +16,19 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserAccountSQL userDAO;
     private CategoryDAOImpl categoryDAO;
+    private AddressList addressDAO;
        
     public AdminController() {
         super();
         userDAO = new UserAccountSQL();
         categoryDAO = new CategoryDAOImpl();
+        addressDAO = new AddressList();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -47,6 +53,9 @@ public class AdminController extends HttpServlet {
                 case "list":
                     showUserList(request, response);
                     break;
+                case "CustomerInquiry":
+                	getCustomerList(request, response);
+                	break;
                 case "deleteUser":
                 	deleteUser(request,response);
                 	break;
@@ -189,5 +198,33 @@ public class AdminController extends HttpServlet {
         e.printStackTrace();
         request.getSession().setAttribute("error", "An error occurred: " + e.getMessage());
         response.sendRedirect(request.getContextPath() + "/AdminController?userConfig");
+    }
+    
+    private void getCustomerList(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, ServletException, IOException {
+		HttpSession session = request.getSession();
+		int role_id = (int) session.getAttribute("role_id");
+		if (role_id != 1) {
+			String contextPath = request.getContextPath();
+			String loginPage = contextPath + "/View/Login.jsp";
+			response.sendRedirect(loginPage);
+			return;
+		}
+		
+        List<UserAccount> customerUserAccount = userDAO.getAllUserByRoleId(2);
+        List<UserDetails> customerDetails = new ArrayList<>();
+        List<List<Address>> customerAddresses = new ArrayList<>();
+        List<AddressType> listOfAddressTypes = addressDAO.getAllAddressType();
+        
+        for (UserAccount user: customerUserAccount) {
+        	customerDetails.add(userDAO.getUserDetailsByUserId(user.getUser_id()));
+        	customerAddresses.add(addressDAO.getAddressesByUserId(user.getUser_id()));
+        }
+        
+        request.setAttribute("listOfUsers", customerUserAccount);
+        request.setAttribute("listOfUserDetails", customerDetails);
+        request.setAttribute("listOfAddresses", customerAddresses);
+        request.setAttribute("listOfAddressTypes", listOfAddressTypes);
+        request.getRequestDispatcher("/View/admin/CustomerInquiry.jsp").forward(request, response);
     }
 }

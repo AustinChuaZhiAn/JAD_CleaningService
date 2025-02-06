@@ -1,7 +1,7 @@
 package Model;
 
 public class Address {
-	private int address;
+	private int address_id;
 	private int user_details;
 	private int postal_code;
 	private String block_number;
@@ -10,9 +10,9 @@ public class Address {
 	private String building_name;
 	private int address_type_id;
 	
-	public Address(int address, int user_details, int postal_code, String block_number
+	public Address(int address_id, int user_details, int postal_code, String block_number
 			, String street_name, String unit_number, String building_name, int address_type_id) {
-		this.address = address;
+		this.address_id = address_id;
 		this.user_details = user_details;
 		this.postal_code = postal_code;
 		this.block_number = block_number;
@@ -23,11 +23,11 @@ public class Address {
 	}
 
 	public int getAddress() {
-		return address;
+		return address_id;
 	}
 
 	public void setAddress(int address) {
-		this.address = address;
+		this.address_id = address;
 	}
 
 	public int getUser_details() {

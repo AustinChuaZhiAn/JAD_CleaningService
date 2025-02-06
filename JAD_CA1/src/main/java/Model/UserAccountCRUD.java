@@ -23,4 +23,5 @@ public interface UserAccountCRUD {
     ArrayList<UserAccount> getAllUsers() throws SQLException;	
     boolean isValidRole(int roleId) throws SQLException;
     boolean updateUserRole(int userId, int roleId) throws SQLException;
+    List<UserAccount> getAllUserByRoleId(int id) throws SQLException;
 }

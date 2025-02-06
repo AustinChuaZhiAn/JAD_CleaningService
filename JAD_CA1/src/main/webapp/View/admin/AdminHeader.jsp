@@ -44,6 +44,11 @@
                             <i class="fas fa-users"></i>Users
                         </a>
                     </li>
+					<li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/AdminController?action=CustomerInquiry">
+                            <i class="fas fa-users"></i>Customer Details
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link logout-btn" href="${pageContext.request.contextPath}/View/Login.jsp">
                             <i class="fas fa-sign-out-alt"></i>Logout
