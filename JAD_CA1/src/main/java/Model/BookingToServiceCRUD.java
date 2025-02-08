@@ -9,4 +9,8 @@ public interface BookingToServiceCRUD {
     
     // Read
     List<BookingToService> getbtsByBookingId(int booking_id) throws SQLException;
+    
+    
+    List<BookingToService> getBookingsByCleanerId(int cleaner_id) throws SQLException;
+    boolean updateBookingStatus(int bookingServiceId, int statusId) throws SQLException;
 }

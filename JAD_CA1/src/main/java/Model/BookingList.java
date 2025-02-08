@@ -38,7 +38,7 @@ public class BookingList implements BookingCRUD {
 //			}
 
 //			pstmt.setInt(5, cleaner_id);
-			pstmt.setInt(2, 1);
+			pstmt.setInt(2, 4);
 
 			pstmt.executeUpdate();
 

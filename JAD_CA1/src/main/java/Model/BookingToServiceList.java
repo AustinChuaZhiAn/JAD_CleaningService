@@ -16,6 +16,7 @@ import utils.DatabaseConnection;
 
 public class BookingToServiceList implements BookingToServiceCRUD {
 	// Create
+	@Override
 	public int addBookingServiceEntry(int booking_id, List<String> serviceDetails) throws SQLException {
 		// SQL query for inserting a new booking into the 'booking' table
 		String sql = """
@@ -73,6 +74,7 @@ public class BookingToServiceList implements BookingToServiceCRUD {
 	}
 
 	// Read
+    @Override
 	public List<BookingToService> getbtsByBookingId(int booking_id) throws SQLException {
 		String sql = """
 				SELECT
@@ -110,4 +112,72 @@ public class BookingToServiceList implements BookingToServiceCRUD {
 
 		return listBookingToService;
 	}
+
+@Override
+public List<BookingToService> getBookingsByCleanerId(int cleaner_id) throws SQLException {
+    String sql = """
+        SELECT 
+            bts.booking_service_id, 
+            bts.booking_id,
+            bts.service_id,
+            bts.address_id,
+            bts.time,
+            bts.date,
+            bts.cleaner_id,
+            bts.special_request,
+            bts.status_id,
+            s.status_name
+        FROM bookingtoservice bts
+        JOIN status s ON bts.status_id = s.status_id
+        WHERE bts.cleaner_id = ?
+        ORDER BY bts.date, bts.time
+    """;
+
+    List<BookingToService> bookings = new ArrayList<>();
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setInt(1, cleaner_id);
+
+        try (ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                BookingToService booking = new BookingToService(
+                    rs.getInt("booking_service_id"),  // Use this column name
+                    rs.getInt("booking_id"),
+                    rs.getInt("service_id"),
+                    rs.getInt("address_id"),
+                    rs.getTime("time") != null ? rs.getTime("time").toLocalTime() : null,
+                    rs.getDate("date") != null ? rs.getDate("date").toLocalDate() : null,
+                    rs.getInt("cleaner_id"),
+                    rs.getString("special_request"),
+                    rs.getInt("status_id"),
+                    rs.getString("status_name")
+                );
+                bookings.add(booking);
+            }
+        }
+    }
+
+    return bookings;
+}
+
+@Override
+public boolean updateBookingStatus(int bookingServiceId, int statusId) throws SQLException {
+    String sql = """
+        UPDATE bookingtoservice 
+        SET status_id = ? 
+        WHERE booking_service_id = ?
+    """;
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setInt(1, statusId);
+        pstmt.setInt(2, bookingServiceId);
+
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0;
+    }
+}
 }

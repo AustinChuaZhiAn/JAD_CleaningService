@@ -3,37 +3,33 @@ package Controller;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
+import jakarta.ws.rs.client.*;
+import jakarta.ws.rs.core.*;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import Model.*;
 import java.net.URLEncoder;
 
-import Model.*;
 
 @WebServlet("/ServiceController")
 public class ServiceController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ServiceDAO serviceDAO;
-    private CategoryDAO categoryDAO;
+    private final Client client;
+    private final String categoryBaseUrl;
     private ServiceTypeRead serviceTypeRead;
     private FrequencyRead frequencyRead;
     
     public ServiceController() {
         super();
-        initializeDAOs();
-    }
-    
-    public void init() {
+        client = ClientBuilder.newClient();
+        categoryBaseUrl = "http://localhost:3000/api/categories";
         initializeDAOs();
     }
     
     private void initializeDAOs() {
         serviceDAO = new ServiceDAOImpl();
-        categoryDAO = new CategoryDAOImpl();
         serviceTypeRead = new ServiceTypeList();
         frequencyRead = new FrequencyList();
     }
@@ -71,7 +67,6 @@ public class ServiceController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        
         try {
             switch (action) {
                 case "create":
@@ -90,33 +85,35 @@ public class ServiceController extends HttpServlet {
     }
     
     private void listServices(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, ServletException, IOException {
-        ArrayList<Service> services = serviceDAO.getAllServices();
-        request.setAttribute("services", services);
-        request.getRequestDispatcher("/View/admin/Services.jsp").forward(request, response);
+            throws ServletException, IOException {
+        try {
+            ArrayList<Service> services = serviceDAO.getAllServices();
+            request.setAttribute("services", services);
+            request.getRequestDispatcher("/View/admin/Services.jsp").forward(request, response);
+        } catch (Exception e) {
+            handleError(request, response, e);
+        }
     }
-    
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            ArrayList<Category> categories = categoryDAO.getAllCategory();
+            WebTarget target = client.target(categoryBaseUrl);
+            Category[] categories = target.request(MediaType.APPLICATION_JSON)
+                                       .get(Category[].class);
+                                       
             List<ServiceType> serviceTypes = serviceTypeRead.getAllServiceType();
             List<Frequency> frequencies = frequencyRead.getAllFrequency();
-            // Create empty service for the form
-            Service emptyService = new Service(); 
             
-            request.setAttribute("service", emptyService);
-            request.setAttribute("categories", categories);
+            request.setAttribute("service", new Service());
+            request.setAttribute("categories", Arrays.asList(categories));
             request.setAttribute("serviceTypes", serviceTypes);
             request.setAttribute("frequencies", frequencies);
             
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/View/admin/ServiceForm.jsp");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("/View/admin/ServiceForm.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("error", "Failed to load form data: " + e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/View/admin/ServiceForm.jsp");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("/View/admin/ServiceForm.jsp").forward(request, response);
         }
     }
 
@@ -128,38 +125,28 @@ public class ServiceController extends HttpServlet {
             
             if (service == null) {
                 request.setAttribute("error", "Service not found");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/ServiceController");
-                dispatcher.forward(request, response);
+                request.getRequestDispatcher("/ServiceController").forward(request, response);
                 return;
             }
 
-            ArrayList<Category> categories = categoryDAO.getAllCategory();
+            WebTarget target = client.target(categoryBaseUrl);
+            Category[] categories = target.request(MediaType.APPLICATION_JSON)
+                                       .get(Category[].class);
             List<ServiceType> serviceTypes = serviceTypeRead.getAllServiceType();
             List<Frequency> frequencies = frequencyRead.getAllFrequency();
             
             request.setAttribute("service", service);
-            request.setAttribute("categories", categories);
+            request.setAttribute("categories", Arrays.asList(categories));
             request.setAttribute("serviceTypes", serviceTypes);
             request.setAttribute("frequencies", frequencies);
             
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/View/admin/ServiceForm.jsp");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("/View/admin/ServiceForm.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("error", "Failed to load form data: " + e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/View/admin/ServiceForm.jsp");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("/View/admin/ServiceForm.jsp").forward(request, response);
         }
     }
 
-    private void handleError(HttpServletRequest request, HttpServletResponse response, Exception e) 
-            throws ServletException, IOException {
-        e.printStackTrace();
-        request.setAttribute("error", e.getMessage());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/View/admin/ServiceForm.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    // Update error handling in methods to match this pattern:
     private void updateService(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -239,6 +226,13 @@ public class ServiceController extends HttpServlet {
         } catch (Exception e) {
             handleError(request, response, e);
         }
+    }
+    
+    private void handleError(HttpServletRequest request, HttpServletResponse response, Exception e) 
+            throws ServletException, IOException {
+        e.printStackTrace();
+        request.setAttribute("error", e.getMessage());
+        request.getRequestDispatcher("/View/admin/ServiceForm.jsp").forward(request, response);
     }
     
     private boolean validateInputs(HttpServletRequest request) {

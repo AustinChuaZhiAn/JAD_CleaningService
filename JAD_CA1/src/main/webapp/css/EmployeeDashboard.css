@@ -1,0 +1,93 @@
+/* Employee Dashboard Styles */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Arial', sans-serif;
+}
+
+.dashboard-container {
+    padding-top: 30px;
+}
+
+.bookings-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    transition: background-color 0.3s ease;
+}
+
+.status-badge {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.status-badge-pending {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.status-badge-in-progress {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.status-badge-completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-badge-cancelled {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-view-details {
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.btn-view-details:hover {
+    color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
+.status-badge {
+    padding: 0.5em 1em;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.status-badge.pending, .status-badge.paid {
+    background-color: #0d6efd;  /* Bootstrap primary blue */
+    color: #fff;
+}
+
+.status-badge.in-progress {
+    background-color: #ffc107;  /* Bootstrap warning yellow */
+    color: #000;
+}
+
+.status-badge.completed {
+    background-color: #198754;  /* Bootstrap success green */
+    color: #fff;
+}
+
+/* Style for the view button */
+.btn-view-details {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+    background-color: transparent;
+}
+
+.btn-view-details:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}

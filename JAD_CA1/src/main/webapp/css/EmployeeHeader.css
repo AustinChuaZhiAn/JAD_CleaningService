@@ -1,0 +1,76 @@
+.dashboard-container {
+    padding: 2rem 0;
+}
+
+.bookings-card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-bottom: 1px solid #eee;
+}
+
+.btn-view-details {
+    background-color: #e9ecef;
+    border: none;
+}
+
+.btn-view-details:hover {
+    background-color: #dee2e6;
+}
+
+/* Status Badge Styles */
+.status-badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+/* Specific status colors with dark text */
+.pending {
+    background-color: #ffd700;
+    color: #000000;
+}
+
+.in-progress {
+    background-color: #87ceeb;
+    color: #000000;
+}
+
+.completed {
+    background-color: #90ee90;
+    color: #000000;
+}
+
+.cancelled {
+    background-color: #ff6b6b;
+    color: #ffffff;
+}
+
+.delayed {
+    background-color: #ffa07a;
+    color: #000000;
+}
+
+/* Modal styles */
+.modal-header {
+    background-color: #f8f9fa;
+}
+
+.modal-body strong {
+    color: #495057;
+}
+
+/* Table styles */
+.table > :not(caption) > * > * {
+    padding: 1rem;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Text styles */
+.text-muted {
+    color: #6c757d !important;
+}

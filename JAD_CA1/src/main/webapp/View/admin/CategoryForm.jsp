@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="Model.Category" %>
+	<%
+    if (session.getAttribute("role_id") == null || !session.getAttribute("role_id").equals(1)) {
+        response.sendRedirect(request.getContextPath() + "/View/Login.jsp");
+        return;
+    }
+    %>
 <!DOCTYPE html>
 <html>
 <head>

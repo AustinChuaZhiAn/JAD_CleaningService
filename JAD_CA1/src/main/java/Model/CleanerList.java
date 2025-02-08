@@ -23,7 +23,35 @@ public class CleanerList implements CleanerRead {
 		}
 		return cleanerList;
 	}
-
+	@Override
+	public boolean createCleaner(String cleanerName, String contact) throws SQLException {
+	    String sql = "INSERT INTO cleaner (cleaner_name, contact) VALUES (?, ?)";
+	    
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setString(1, cleanerName);
+	        pstmt.setString(2, contact);
+	        
+	        int result = pstmt.executeUpdate();
+	        return result > 0;
+	    }
+	}
+	
+	@Override
+	public boolean deleteCleaner(int id) throws SQLException {
+	    String sql = "DELETE FROM cleaner WHERE cleaner_id = ?";
+	    
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setInt(1, id);
+	        int result = pstmt.executeUpdate();
+	        return result > 0;
+	    }
+	}
+	
+	
 	@Override
 	public Cleaner getCleanerByBookingId(int id) throws SQLException {
 	    String sql = """

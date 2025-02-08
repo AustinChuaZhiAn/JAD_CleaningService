@@ -8,4 +8,6 @@ public interface CleanerRead {
     List<Cleaner> getAllCleaner() throws SQLException;
     Cleaner getCleanerByCleanerId(int id) throws SQLException;
     Cleaner getCleanerByBookingId(int id) throws SQLException;
+    boolean createCleaner(String cleanerName, String contact) throws SQLException;
+    boolean deleteCleaner(int id) throws SQLException;
 }

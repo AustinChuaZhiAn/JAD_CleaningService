@@ -310,6 +310,7 @@ public class userController extends HttpServlet {
 
 		userDAO.updateUsernameByUserId(username, user_id);
 		userDAO.updateUserDetailsByUserId(email, phone, user_id);
+		session.setAttribute("username", username);
 	}
 
 	private void AddAddressByUserDetailsId(HttpServletRequest request, HttpServletResponse response)
